@@ -1,9 +1,8 @@
 <p align="right">
-  <img src="https://img.shields.io/badge/中文-当前-brightgreen" alt="中文">
-  <a href="./README.md">
-    <img src="https://img.shields.io/badge/English-Switch-blue" alt="English">
-  </a>
+  <strong>中文</strong> | <a href="./README.md">English</a>
 </p>
+
+
 
 
 

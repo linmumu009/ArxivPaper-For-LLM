@@ -1,9 +1,7 @@
 <p align="right">
-  <a href="./README.zh-CN.md">
-    <img src="https://img.shields.io/badge/中文-切换-blue" alt="中文">
-  </a>
-  <img src="https://img.shields.io/badge/English-Current-brightgreen" alt="English">
+  <a href="./README.zh-CN.md">中文</a> | <strong>English</strong>
 </p>
+
 
 
 # ArxivPaper: A Reproducible Pipeline for Retrieval, Screening, and Summarization of arXiv Publications
