@@ -1,416 +1,240 @@
-# ArxivPaper
-
-> README 结构：
->
-> 1. 配置准备 2) 运行指令 3) 项目结构 4) 代码流程（按执行顺序）
-
----
-
-## 1. 配置准备
-
-只需要改：`config/config.py`。
-
-### 1.1 必填
-
-* MinerU Token（`minerU_Token`）：PDF → Markdown 解析；在 `https://mineru.net/apiManage/token` 创建
-* DashScope Key（`qwen_api_key`）：机构识别 + 摘要生成；在 `https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.519511fceUTPZn&tab=model#/api-key` 创建
+<p align="right">
+  <a href="./README.zh-CN.md">
+    <img src="https://img.shields.io/badge/中文-切换-blue" alt="中文">
+  </a>
+  <img src="https://img.shields.io/badge/English-Current-brightgreen" alt="English">
+</p>
 
 
-### 1.2 模型与提示词（每项含义）
+# ArxivPaper: A Reproducible Pipeline for Retrieval, Screening, and Summarization of arXiv Publications
 
-| 配置项                           | 作用脚本                | 含义                                   |
-| ----------------------------- | ------------------- | ------------------------------------ |
-| `theme_select_base_url`       | `llm_select_theme.py` | 主题评分模型的 OpenAI 兼容 base_url           |
-| `theme_select_model`          | `llm_select_theme.py` | 主题评分模型名称                             |
-| `theme_select_max_tokens`     | `llm_select_theme.py` | 主题评分输出 token 上限                      |
-| `theme_select_temperature`    | `llm_select_theme.py` | 主题评分采样温度                             |
-| `theme_select_concurrency`    | `llm_select_theme.py` | 主题评分并发数（线程数）                         |
-| `theme_select_system_prompt`  | `llm_select_theme.py` | 主题评分系统提示词（要求输出 0~1 分数）               |
-| `org_base_url`                | `pdf_info.py`       | 机构识别模型的 OpenAI 兼容 base_url           |
-| `org_model`                   | `pdf_info.py`       | 机构识别模型名称                             |
-| `org_max_tokens`              | `pdf_info.py`       | 机构识别输出 token 上限                      |
-| `org_temperature`             | `pdf_info.py`       | 机构识别采样温度                             |
-| `pdf_info_system_prompt`      | `pdf_info.py`       | 机构识别 + 是否大机构 + 生成短摘要的规则（要求输出 JSON）   |
-| `summary_base_url`            | `paper_summary.py`  | 摘要模型的 OpenAI 兼容 base_url             |
-| `summary_model`               | `paper_summary.py`  | 摘要模型名称                               |
-| `summary_max_tokens`          | `paper_summary.py`  | 摘要输出 token 上限                        |
-| `summary_temperature`         | `paper_summary.py`  | 摘要采样温度                               |
-| `summary_input_hard_limit`    | `paper_summary.py`  | 输入硬上限（用于裁剪预算）                        |
-| `summary_input_safety_margin` | `paper_summary.py`  | 安全边距（预留给提示词/结构）                      |
-| `summary_concurrency`         | `paper_summary.py`  | 摘要并发数（线程数）                           |
-| `summary_example`             | `config.py`         | 摘要提示词中的示例文本                          |
-| `system_prompt`               | `paper_summary.py`  | 摘要系统提示词（含示例，决定结构/风格）                 |
+ArxivPaper provides a practical, reproducible pipeline for daily retrieval of arXiv papers, automatic thematic screening using large language models (LLMs), PDF handling and parsing via MinerU, institution detection, and concise Chinese summary generation, with optional ingestion into Zotero. The design emphasizes transparent filtering criteria, deterministic windowing, and operational robustness (retry, idempotence, and concurrency controls).
 
 ---
 
-## 2. 运行指令
+## 1. Configuration
 
-### 2.1 直接运行（不带参数）
+Only one file requires editing: `config/config.py`.
+
+### 1.1 Required Credentials
+
+- MinerU Token (`minerU_Token`): for PDF → Markdown parsing. Obtain from https://mineru.net/apiManage/token
+- DashScope Key (`qwen_api_key`): for institution detection and summary generation. Obtain from https://bailian.console.aliyun.com/?spm=a2c4g.11186623.0.0.519511fceUTPZn&tab=model#/api-key
+
+### 1.2 Models and Prompts (Key Parameters)
+
+- Theme scoring (Controller/llm_select_theme.py)
+  - `theme_select_base_url`: OpenAI-compatible base URL for the scoring model
+  - `theme_select_model`: model name
+  - `theme_select_max_tokens`: upper bound for output tokens
+  - `theme_select_temperature`: sampling temperature
+  - `theme_select_concurrency`: number of concurrent requests (threads)
+  - `theme_select_system_prompt`: scoring instruction (expects a normalized 0–1 score)
+
+- Institution detection (Controller/pdf_info.py)
+  - `org_base_url`: OpenAI-compatible base URL
+  - `org_model`: model name
+  - `org_max_tokens`: upper bound for output tokens
+  - `org_temperature`: sampling temperature
+  - `pdf_info_system_prompt`: instruction producing structured JSON (institution, “is_large”, and short abstract points)
+
+- Summarization (Controller/paper_summary.py)
+  - `summary_base_url`: OpenAI-compatible base URL
+  - `summary_model`: model name
+  - `summary_max_tokens`: upper bound for output tokens
+  - `summary_temperature`: sampling temperature
+  - `summary_input_hard_limit`: hard input length cap (budget control)
+  - `summary_input_safety_margin`: reserved margin for prompts/structure
+  - `summary_concurrency`: number of concurrent requests (threads)
+  - `summary_example`: example text (referenced by config.py)
+  - `system_prompt`: system prompt defining final structure and style
+
+---
+
+## 2. Usage
+
+### 2.1 Default run
 
 ```bash
-python app.py default
+python app.py
 ```
 
-### 2.2 带参数运行（示例 2 个）
+### 2.2 Run with parameters (examples)
 
 ```bash
-# 示例1：自然语言查询 + 指定时区
+# Example: natural-language query + specified timezone anchor
 python app.py default --query "LLM alignment" --anchor-tz Asia/Shanghai
-
 ```
 
-> pipeline 名称（如 `default/daily`）之后的参数，**只会传给第一步** `Controller/arxiv_search04.py`。
+Note: any arguments following the pipeline name (e.g., `default` or `daily`) are forwarded only to Step 1 (`Controller/arxiv_search04.py`).
 
-### 可调参数（命令行）
+### 2.3 Command-line options
 
-| 参数                |                  默认值 | 说明                                                      |
-| ----------------- | -------------------: | ------------------------------------------------------- |
-| `--query`         |                `""` | 自然语言或高级表达式（ti:/abs:/AND/...）                          |
-| `--categories`    | `SEARCH_CATEGORIES` | 逗号分隔分类列表                                               |
-| `--start`         |                `""` | UTC 起始（YYYY-MM-DD 或 ISO8601）                           |
-| `--end`           |                `""` | UTC 结束（右开；若为日期则自动 +1 天）                               |
-| `--anchor-tz`     |   `Asia/Shanghai`   | 以该时区的当天 00:00 作为 end                                  |
-| `--days`          |                 `1` | 未提供 start/end 时，从锚定 00:00 往前推 days 天                  |
-| `--anchor-date`   |                `""` | 锚定日期（YYYY-MM-DD）                                      |
-| `--last-hours`    |              `None` | 未提供 start/end 时使用 now_utc - last_hours 到 now_utc（互斥） |
-| `--page-size`     |  `PAGE_SIZE_DEFAULT` | 每页拉取数量（1~2000）                                        |
-| `--max-papers`    | `MAX_PAPERS_DEFAULT` | 最多保留论文数量                                              |
-| `--sleep`         |      `SLEEP_DEFAULT` | 翻页间隔（秒）                                               |
-| `--use-proxy`     |  `USE_PROXY_DEFAULT` | 允许从环境变量读取代理                                           |
-| `--user-agent`    |      `REQUESTS_UA` | User-Agent                                              |
-| `--out`           |                 （预留） | 脚本参数存在，但当前版本未实际生效                                    |
+- `--query` (default `""`): natural language or advanced query (ti:/abs:/AND/…)
+- `--categories` (default `SEARCH_CATEGORIES`): comma-separated categories
+- `--start` (default `""`): UTC start (YYYY-MM-DD or ISO8601)
+- `--end` (default `""`): UTC end (right-open; YYYY-MM-DD automatically +1 day)
+- `--anchor-tz` (default `Asia/Shanghai`): define end by local midnight in this timezone
+- `--days` (default `1`): when start/end unspecified, use [end − days, end) based on anchor midnight
+- `--anchor-date` (default `""`): anchor date (YYYY-MM-DD)
+- `--last-hours` (default `None`): alternative [now_utc − last_hours, now_utc) window (mutually exclusive with anchor settings)
+- `--page-size` (default `PAGE_SIZE_DEFAULT`): page size (1–2000)
+- `--max-papers` (default `MAX_PAPERS_DEFAULT`): maximum number of papers retained
+- `--sleep` (default `SLEEP_DEFAULT`): pagination interval (seconds)
+- `--use-proxy` (default `USE_PROXY_DEFAULT`): allow proxy from environment variables
+- `--user-agent` (default `REQUESTS_UA`): User-Agent string
+- `--out` (reserved): argument present but not used in the current version
 
 ---
 
-## 3. 项目结构
+## 3. Directory Layout
 
-```markdown
-. 📂 ArxivPaper                         # 项目根目录
-├── 📄 README.md                        # 当前说明文档（主 README）
-├── 📄 app.py                           # 主流程：按 pipeline 调用 Controller 下各步骤
-├── 📄 pdf_download.log                 # pdf_download.py 的运行日志
-├── 📄 readmePrinceple.md               # 撰写 README 的约定与原则记录
-├── 📂 Controller/                      # 核心步骤脚本目录
-│  ├── 📂 __pycache__/                  # Controller 下的 Python 字节码缓存
-│  ├── 📄 arxiv_search04.py             # Step1：arXiv 拉取（支持查询与时间窗口）
-│  ├── 📄 paperList_remove_duplications.py  # Step1.1：去重并记录历史处理论文
-│  ├── 📄 llm_select_theme.py           # Step2：LLM 主题相关性评分
-│  ├── 📄 paper_theme_filter.py         # Step3：按相关性分数过滤
-│  ├── 📄 pdf_download.py               # Step4：根据清单下载原始 PDF（按日期分子目录）
-│  ├── 📄 pdf_split.py                  # Step5：截取前若干页生成预览 PDF（按日期分子目录）
-│  ├── 📄 pdfsplite_to_minerU.py        # Step6：预览 PDF → MinerU 解析为 Markdown
-│  ├── 📄 pdf_info.py                   # Step7：调用大模型解析机构信息与摘要要点
-│  ├── 📄 instutions_filter.py          # Step8：基于机构信息筛选出“大机构论文”
-│  ├── 📄 selectpaper.py                # Step9：按“大机构清单”迁移精选 PDF
-│  ├── 📄 selectedpaper_to_mineru.py    # Step10：精选 PDF → MinerU 全文解析
-│  ├── 📄 paper_summary.py              # Step11：根据 MinerU 全文生成中文摘要
-│  ├── 📄 zotero_push.py                # Step12：导入精选论文到 Zotero
-│  ├── 📄 http_session.py               # 统一的 requests Session 构建与重试逻辑
-├── 📂 config/                          # 集中配置目录
-│  ├── 📂 __pycache__/                  # config 下的字节码缓存
-│  ├── 📄 config copy.py                # 早期配置备份（保留历史用）
-│  ├── 📄 paperList.json                # 全局“已处理论文列表”（去重用）
-├── 📂 data/                            # 运行数据目录（按日期分子目录）
-│  ├── 📂 arxivList/                    # 每日候选清单 md
-│  ├── 📂 paperList_remove_duplications/ # 去重后的候选清单 md
-│  ├── 📂 llm_select_theme/             # LLM 评分后的清单 md
-│  ├── 📂 paper_theme_filter/           # 主题过滤后的清单 md
-│  ├── 📂 raw_pdf/                      # 原始 PDF
-│  ├── 📂 preview_pdf/                  # 预览 PDF
-│  ├── 📂 preview_pdf_to_mineru/        # 预览 MinerU md
-│  ├── 📂 pdf_info/                     # 机构识别 JSON
-│  ├── 📂 instutions_filter/            # 大机构清单
-│  ├── 📂 selectedpaper/                # 精选 PDF
-│  ├── 📂 selectedpaper_to_mineru/      # 精选 MinerU md
-│  └── 📂 paper_summary/                # 摘要输出
-├── 📂 logs/                            # 运行日志目录（按日期分子目录）
-└── 📂 reference/                       # 参考项目与示例代码（旧仓库拷贝）
+```text
+ArxivPaper/                         # project root
+├── README.en.md                    # this English README
+├── README.zh-CN.md                 # Chinese README
+├── app.py                          # orchestration: runs steps under Controller by pipeline
+├── readmePrinceple.md              # notes and principles for authoring README
+├── Controller/                     # core step scripts
+│   ├── arxiv_search04.py           # Step 1: arXiv retrieval and time-window filtering
+│   ├── paperList_remove_duplications.py  # Step 1.1: de-duplication and historical record
+│   ├── llm_select_theme.py         # Step 2: LLM thematic relevance scoring
+│   ├── paper_theme_filter.py       # Step 3: filter by relevance score
+│   ├── pdf_download.py             # Step 4: download original PDFs
+│   ├── pdf_split.py                # Step 5: slice preview pages
+│   ├── pdfsplite_to_minerU.py      # Step 6: parse preview PDFs to Markdown via MinerU
+│   ├── pdf_info.py                 # Step 7: institution detection and structured info
+│   ├── instutions_filter.py        # Step 8: filter “large institution” papers
+│   ├── selectpaper.py              # Step 9: move selected PDFs
+│   ├── selectedpaper_to_mineru.py  # Step 10: parse full PDFs via MinerU
+│   ├── paper_summary.py            # Step 11: generate Chinese summaries
+│   ├── zotero_push.py              # Step 12: ingest selected papers into Zotero
+│   └── http_session.py             # unified requests.Session with retry and headers
+├── config/
+│   ├── config.py                   # central configuration
+│   └── paperList.json              # global “processed papers” list for de-duplication
+├── data/
+│   └── pdf_info/                   # structured institution JSON (by date)
+└── logs/                           # run-time logs (by date)
 ```
 
 ---
 
-## 4. 代码流程（按执行文件顺序）
+## 4. Processing Pipeline (execution order)
 
-**app.py 默认流程**
-```markdown
-- 1) arXiv 拉取与窗口过滤（`arxiv_search04.py`）
-- 1.1) 去重并记录处理过的论文（`paperList_remove_duplications.py`）
-- 2) LLM 主题相关性评分（`llm_select_theme.py`）
-- 3) 主题相关性过滤（`paper_theme_filter.py`）
-- 4) 下载原始 PDF（`pdf_download.py`）
-- 5) 切预览页（`pdf_split.py`）
-- 6) 预览 PDF → MinerU 解析（`pdfsplite_to_minerU.py`）
-- 7) 机构识别与结构化信息（`pdf_info.py`）
-- 8) 生成“大机构 PDF 清单”（`instutions_filter.py`）
-- 9) 迁移精选 PDF（`selectpaper.py`）
-- 10) 精选 PDF → MinerU 全文解析（`selectedpaper_to_mineru.py`）
-- 11) 生成中文摘要（`paper_summary.py`）
-- 12) 导入精选论文到 Zotero（`zotero_push.py`）
-```
-### 0) 总编排（`app.py`）
+### 0) Orchestration (`app.py`)
 
-**输入**：pipeline 名称与额外参数（`app.py`）
+- Input: pipeline name and extra arguments
+- Output: sequential execution of step scripts under `Controller/*.py` (Steps 1–12)
+- Execution: read pipeline (default `default`), invoke each step via `subprocess.run()`, forward post-pipeline arguments only to Step 1
 
-**输出**：依次执行各步骤脚本（`Controller/*.py`，见下文步骤 1~10）
+### 1) arXiv retrieval and window filtering (`Controller/arxiv_search04.py`)
 
-**逻辑流程**
+- Inputs
+  - Retrieval conditions: `SEARCH_CATEGORIES` + `--query`
+  - Window and scale: `--start/--end/--anchor-*` + `PAGE_SIZE_DEFAULT/MAX_PAPERS_DEFAULT/SLEEP_DEFAULT`
+- Outputs
+  - Candidate list for the day: `data/arxivList/<date>.md`
+- Logic
+  - Compute the UTC window
+  - Build query with `submittedDate:[START TO END]` for pagination ordering
+  - Page with `sortBy=submittedDate` and `sortOrder=descending`
+  - Filter by the Atom feed’s `published` timestamp only (converted to UTC); keep entries satisfying `window_start ≤ published_utc < window_end`
+  - Write a Markdown report with window info, counts, and ordered entries
 
-* 读取 pipeline（默认 `default`）
-* 按 pipeline 顺序 `subprocess.run()` 执行步骤
-* pipeline 之后的参数仅转发给 Step1（`arxiv_search04.py`）
+### 1.1) De-duplication and historical record (`Controller/paperList_remove_duplications.py`)
 
----
+- Inputs
+  - Daily candidate list (`data/arxivList/<date>.md`; default selects the latest)
+  - Historical record (`config/paperList.json`; can be empty on first run)
+- Outputs
+  - Updated `config/paperList.json` containing `{title, source, writing_datetime}`
+  - A de-duplicated Markdown from the daily list in `data/paperList_remove_duplications/<date>.md`
+- Logic
+  - Read existing records and construct a de-duplication key set `(title, source)`
+  - Parse daily Markdown entries to extract titles and arXiv IDs
+  - Append new records only when `(title, source)` not yet present
+  - Rewrite a de-duplicated Markdown keeping section headers and metadata
 
-### 1) arXiv 拉取与窗口过滤（`Controller/arxiv_search04.py`）
+### 2) LLM thematic relevance scoring (`Controller/llm_select_theme.py`)
 
-**输入**
+- Input: de-duplicated list (`data/paperList_remove_duplications/<date>.md`) and scoring configuration (`theme_select_*`)
+- Output: scored list (`data/llm_select_theme/<date>.md`) with `theme_relevant_score ∈ [0,1]`
+- Logic: parse titles/abstracts and obtain scores via concurrent model calls, writing back into the original structure
 
-* arXiv 检索条件（`SEARCH_CATEGORIES` + `--query`）
-* 时间窗口与规模（`--start/--end/--anchor-*` + `PAGE_SIZE_DEFAULT/MAX_PAPERS_DEFAULT/SLEEP_DEFAULT`）
+### 3) Relevance-based filtering (`Controller/paper_theme_filter.py`)
 
-**输出**
+- Input: scored list (`data/llm_select_theme/<date>.md`)
+- Output: filtered list (`data/paper_theme_filter/<date>.md`)
+- Logic: retain entries with `score ≥ threshold` while preserving header content
 
-* 当天候选清单（`data/arxivList/<date>.md`）
+### 4) Original PDF download (`Controller/pdf_download.py`)
 
-**逻辑流程**
+- Input: candidate list (`data/arxivList/<date>.md`)
+- Output: original PDFs (`data/raw_pdf/<date>/<arxiv_id>.pdf`)
+- Logic: extract arXiv IDs; skip if a valid PDF already exists (`%PDF-` header); otherwise download with retries, write to `.part`, validate, and atomically rename to `.pdf`
 
-* 计算 UTC 窗口（`submittedDate:[START TO END]`）
-* 构建 query：`(cat:... OR ...) AND (all:... OR 高级表达式) AND submittedDate`
-* `submittedDate desc` 分页拉取
-* 仅按时间窗口过滤（不做正则计分/分桶）
-* 输出 Markdown：写窗口信息与统计，按列表顺序输出
+### 5) Preview slicing (`Controller/pdf_split.py`)
 
----
+- Input: original PDFs
+- Output: preview PDFs (first two pages) in `data/preview_pdf/<date>/<arxiv_id>.pdf`
+- Logic: slice front pages; skip if already present
 
-### 1.1) 去重并记录处理过的论文（`Controller/paperList_remove_duplications.py`）
+### 6) MinerU parsing for previews (`Controller/pdfsplite_to_minerU.py`)
 
-**输入**
+- Inputs: preview PDFs and MinerU token
+- Output: preview Markdown files in `data/preview_pdf_to_mineru/<date>/<arxiv_id>.md`
+- Logic: perform batch processing (obtain upload URLs → PUT → poll → download zip → extract md); skip if output already exists
 
-* 当天候选清单（`data/arxivList/<date>.md`，默认选最新一份）
-* 历史处理记录（`config/paperList.json`，首次运行可为空）
+### 7) Institution detection and structured info (`Controller/pdf_info.py`)
 
-**输出**
+- Inputs: preview Markdown (`data/preview_pdf_to_mineru/<date>/*.md`), metadata (title/published/arxiv_id) from the daily list, and model/prompt configuration (`org_*`, `pdf_info_system_prompt`)
+- Output: structured JSON in `data/pdf_info/<date>.json` with fields `instution/is_large/abstract`
+- Logic: concurrent model calls (default concurrency=8 configurable in `config/config.py`), merge metadata, deduplicate by `arxiv_id`
 
-* 更新后的处理记录（`config/paperList.json`，JSON 数组）
+### 8) Large-institution filtering (`Controller/instutions_filter.py`)
 
-  * 每条记录字段：
-    * `title`：论文标题
-    * `source`：论文编号（如 `2601.02454`）
-    * `writing_datetime`：写入记录的时间（UTC ISO 格式）
+- Input: `data/pdf_info/<date>.json`
+- Output: PDF list containing only “large institution” papers at `data/instutions_filter/<date>/<date>.json`
+- Logic: retain entries where `is_large == true`
 
-**逻辑流程**
+### 9) Move selected PDFs (`Controller/selectpaper.py`)
 
-* 从 `config/paperList.json` 读取已有记录，构造去重键集合（`(title, source)`）
-* 解析当天候选清单 md 中的论文条目：
-  * 抓取标题（编号行里的粗体部分）
-  * 抓取 arXiv 编号（`- arXiv: [2601.xxxxx]` 中的方括号内容）
-* 对每条 `title + source`：
-  * 若在历史记录中已存在，则视为“以前处理过”，仅跳过本次写入
-  * 若不存在，则认为是首次处理：
-    * 追加一条 `{title, source, writing_datetime}` 到 `paperList.json`
+- Inputs: large-institution list and original PDFs
+- Output: selected PDFs in `data/selectedpaper/<date>/<arxiv_id>.pdf`
+- Logic: parse IDs and move (`shutil.move`), removing sources from the original location
 
-* 根据“未重复论文列表”重写一份去重后的 md：
-  * 保留原有的标题、时间窗口说明与分组小节（`##` 开头行）
-  * 对每个论文条目（编号行 + Published + arXiv 行），仅当其 `(title, source)` 未出现在历史记录中时才保留
-  * 将结果写入 `data/paperList_remove_duplications/<date>.md`，其中 `<date>` 与原始清单文件名一致
+### 10) MinerU parsing for full PDFs (`Controller/selectedpaper_to_mineru.py`)
 
-> 后续若希望下载步骤只基于“未处理论文”的 md，可以通过 `--md data/paperList_remove_duplications/<date>.md` 方式显式传给 `Controller/pdf_download.py`。
+- Inputs: selected PDFs and MinerU token
+- Output: Markdown in `data/selectedpaper_to_mineru/<date>/<arxiv_id>.md`
+- Logic: batch parsing for full documents; skip if output exists
 
-> 注意：当前版本只负责维护全局“处理过的论文列表”，不会修改原始的 `data/arxivList/*.md` 内容。后续如果需要在下载前直接改写 md（删除重复论文条目），可以在此基础上再扩展。
+### 11) Chinese summary generation (`Controller/paper_summary.py`)
 
----
+- Inputs: full-text Markdown and summarization configuration (`summary_*`, `system_prompt`)
+- Outputs: single-article summaries (`data/paper_summary/single/<date>/<arxiv_id>.md`) and daily aggregates (`data/paper_summary/gather/<date>/<date>.txt`)
+- Logic: budget-aware trimming, concurrent summarization, and aggregation
 
-### 2) LLM 主题相关性评分（`Controller/llm_select_theme.py`）
+### 12) Zotero ingestion (`Controller/zotero_push.py`)
 
-**输入**
-
-* 去重后的清单（`data/paperList_remove_duplications/<date>.md`）
-* 评分模型配置（`theme_select_*`）
-
-**输出**
-
-* 评分清单（`data/llm_select_theme/<date>.md`，追加 `theme_relevant_score`）
-
-**逻辑流程**
-
-* 解析每条论文的标题与摘要
-* 并发调用模型获取 0~1 分
-* 写回原始结构并追加分数字段
+- Inputs: selected PDFs and per-article summaries
+- Output: newly created Zotero items with attached files (no extra files locally)
+- Logic: locate date-specific directories, construct items (title, abstract, arXiv link), call Zotero Connector endpoints for items and attachments, and provide terminal progress with final statistics
 
 ---
 
-### 3) 主题相关性过滤（`Controller/paper_theme_filter.py`）
+## 5. Notes on Time Windowing and Ordering
 
-**输入**
-
-* 评分清单（`data/llm_select_theme/<date>.md`）
-
-**输出**
-
-* 过滤后清单（`data/paper_theme_filter/<date>.md`）
-
-**逻辑流程**
-
-* 解析 `theme_relevant_score`
-* 仅保留 `score >= threshold` 的条目（保留头部）
+- All timestamps are treated in UTC unless otherwise stated.
+- When using timezone anchoring (`--anchor-tz`), the end of the window is the midnight (00:00) of the specified timezone, converted to UTC.
+- Entries are paginated by arXiv `submittedDate` in descending order for efficient retrieval.
+- Filtering is applied to the Atom feed’s `published` timestamp (first-version submission), not the submittedDate field; this ensures correct window semantics while the sort order aids efficient pagination.
 
 ---
 
-### 4) 下载原始 PDF（`Controller/pdf_download.py`）
+## 6. Ethical Use and Rate Limits
 
-**输入**
+- Respect arXiv’s usage policies and avoid aggressive scraping; retain sensible pagination intervals (`--sleep`) and reasonable `--page-size`.
+- Always provide a clear, identifiable `User-Agent` string (`--user-agent`) and enable proxy only when necessary.
 
-* 候选清单（`data/arxivList/<date>.md`）
-
-**输出**
-
-* 原始 PDF（`data/raw_pdf/<date>/<arxiv_id>.pdf`）
-
-**逻辑流程**
-
-* 从清单解析 arXiv id
-* 若本地已存在且文件头为 `%PDF-`：认为有效并跳过
-* 否则下载（含重试），写入临时 `.part`，通过基础校验后原子替换为 `.pdf`
-
----
-
-### 5) 切预览页（`Controller/pdf_split.py`）
-
-**输入**
-
-* 原始 PDF（`data/raw_pdf/<date>/<arxiv_id>.pdf`）
-
-**输出**
-
-* 预览 PDF（前 2 页，`data/preview_pdf/<date>/<arxiv_id>.pdf`）
-
-**逻辑流程**
-
-* 对每篇 PDF 截取前 2 页并写入预览目录；已存在则跳过
-
----
-
-### 6) 预览 PDF → MinerU 解析（`Controller/pdfsplite_to_minerU.py`）
-
-**输入**
-
-* 预览 PDF（`data/preview_pdf/<date>/*.pdf`）
-* MinerU 凭证（`minerU_Token`）
-
-**输出**
-
-* 预览页 Markdown（`data/preview_pdf_to_mineru/<date>/<arxiv_id>.md`）
-
-**逻辑流程**
-
-* MinerU 批处理：申请上传 URL → PUT 上传 → 轮询结果 → 下载 zip → 提取 md
-* 若 `out/<id>.md` 已存在则跳过该篇
-
----
-
-### 7) 机构识别与结构化信息（`Controller/pdf_info.py`）
-
-**输入**
-
-* 预览页文本（MinerU md，`data/preview_pdf_to_mineru/<date>/*.md`）
-* 清单元信息（标题/发布时间，`data/arxivList/<date>.md`）
-* 机构识别模型与提示词（`org_*`, `pdf_info_system_prompt`）
-
-**输出**
-
-* 结构化结果（`data/pdf_info/<date>.json`，字段含 `instution/is_large/abstract`）
-
-**逻辑流程**
-
-* 对每篇预览 md 并发调用模型（默认并发=8，可在 `config/config.py` 配置）
-* 合并 title/published/arxiv_id 等元信息，追加写入；已存在则按 arxiv_id 去重跳过
-
----
-
-### 8) 生成“大机构 PDF 清单”（`Controller/instutions_filter.py`）
-
-**输入**
-
-* 结构化结果（`data/pdf_info/<date>.json`）
-
-**输出**
-
-* 仅包含“大机构论文”的 PDF 清单（`data/instutions_filter/<date>/<date>.json`）
-
-**逻辑流程**
-
-* 过滤 `is_large == true` 的条目并写出（供后续迁移 PDF）
-
----
-
-### 9) 迁移精选 PDF（`Controller/selectpaper.py`）
-
-**输入**
-
-* 大机构 PDF 清单（`data/instutions_filter/<date>/<date>.json`）
-* 原始 PDF（`data/raw_pdf/<arxiv_id>.pdf`）
-
-**输出**
-
-* 精选 PDF（`data/selectedpaper/<date>/<arxiv_id>.pdf`）
-
-**逻辑流程**
-
-* 从清单解析 arxiv_id，使用 `shutil.move` 将 PDF 移到精选目录（源文件会消失）
-
----
-
-### 10) 精选 PDF → MinerU 全文解析（`Controller/selectedpaper_to_mineru.py`）
-
-**输入**
-
-* 精选 PDF（`data/selectedpaper/<date>/*.pdf`）
-* MinerU 凭证（`minerU_Token`）
-
-**输出**
-
-* 全文 Markdown（`data/selectedpaper_to_mineru/<date>/<arxiv_id>.md`）
-
-**逻辑流程**
-
-* MinerU 批处理解析全文；若 `out/<id>.md` 已存在则跳过
-
----
-
-### 11) 生成中文摘要（`Controller/paper_summary.py`）
-
-**输入**
-
-* 全文文本（MinerU md，`data/selectedpaper_to_mineru/<date>/*.md`）
-* 摘要模型与提示词（`summary_*`, `system_prompt`）
-
-**输出**
-
-* 单篇摘要（`data/paper_summary/single/<date>/<arxiv_id>.md`）
-* 当日汇总（`data/paper_summary/gather/<date>/<date>.txt`）
-
-**逻辑流程**
-
-* 按输入预算裁剪全文 md 后并发调用摘要模型
-* 单篇落盘后拼接生成当日汇总
-
----
-
-### 12) 导入精选论文到 Zotero（`Controller/zotero_push.py`）
-
-**输入**
-
-* 精选 PDF（`data/selectedpaper/<date>/*.pdf`）
-* 中文摘要（`data/paper_summary/single/<date>/*.md`）
-
-**输出**
-
-* Zotero 中创建的条目及附件（本地无额外文件输出）
-
-**逻辑流程**
-
-* 根据日期定位精选 PDF 与摘要目录
-* 为每篇论文构造 Zotero item（标题、摘要、arXiv 链接等元信息）
-* 通过 Zotero Connector 的 `/connector/saveItems` 创建条目
-* 再调用 `/connector/saveAttachment` 上传对应的 PDF/MD/summary 附件
-* 终端以单行进度方式展示导入状态，并在最后输出汇总统计
