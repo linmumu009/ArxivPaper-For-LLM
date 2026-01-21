@@ -1,0 +1,1450 @@
+[
+  {
+    "title": "SDCoNet: Saliency-Driven Multi-Task Collaborative Network for Remote Sensing Object Detection",
+    "source": "arxiv, 2601.12507",
+    "published": "2026-01-18 17:36:48 UTC",
+    "instution": "深圳大学",
+    "is_large": false,
+    "abstract": "提出SDCoNet模型，通过Swin Transformer共享编码器实现超分辨率（SR）与目标检测的隐式特征共享，并引入多尺度显著性预测模块和梯度路由策略，使小目标检测在低质量遥感图像上的性能显著提升。"
+  },
+  {
+    "title": "MemeLens: Multilingual Multitask VLMs for Memes",
+    "source": "arxiv, 2601.12539",
+    "published": "2026-01-18 19:01:03 UTC",
+    "instution": "Qatar Computing Research Institute",
+    "is_large": false,
+    "abstract": "提出了一种统一的多语言多任务视觉语言模型MemeLens，通过整合38个公开数据集并映射到共享标签体系，实现了跨任务和跨语言的 meme 理解，在多模态训练下提升了模型泛化能力，减少了因过拟合导致的性能下降。"
+  },
+  {
+    "title": "Patch-Level Tokenization with CNN Encoders and Attention for Improved Transformer Time-Series Forecasting",
+    "source": "arxiv, 2601.12467",
+    "published": "2026-01-18 16:16:01 UTC",
+    "instution": "VIT-AP",
+    "is_large": false,
+    "abstract": "用CNN对时间序列进行块级编码并结合注意力机制提取局部时序特征，再通过Transformer建模块间依赖关系，使多变量时间序列预测性能达到与基线模型相当的水平。"
+  },
+  {
+    "title": "Improving Low-Resource Machine Translation via Round-Trip Reinforcement Learning",
+    "source": "arxiv, 2601.12535",
+    "published": "2026-01-18 18:44:49 UTC",
+    "instution": "MBZUAI",
+    "is_large": false,
+    "abstract": "使用基于自监督强化学习的往返引导方法，在无平行语料的情况下优化低资源机器翻译，通过chrF++和BLEU作为奖励函数，在NLLB模型上实现了对Central Aymara、Friulian、Wolof和Russian等语言的翻译质量提升。"
+  },
+  {
+    "title": "Failure Modes in Multi-Hop QA: The Weakest Link Law and the Recognition Bottleneck",
+    "source": "arxiv, 2601.12499",
+    "published": "2026-01-18 17:16:04 UTC",
+    "instution": "剑桥大学",
+    "is_large": false,
+    "abstract": "提出Multi-Focus Attention Instruction（MFAI）方法，通过显式引导注意力位置，分离多跳问答中的识别与合成失败机制，发现性能受限于最不可见证据的绝对位置，并使低可见性位置准确率提升高达11.5%。"
+  },
+  {
+    "title": "Semidefinite Programming for Quantum Channel Learning",
+    "source": "arxiv, 2601.12502",
+    "published": "2026-01-18 17:26:45 UTC",
+    "instution": "Lomonosov Moscow State University",
+    "is_large": false,
+    "abstract": "使用半定规划（SDP）方法优化量子信道的Choi矩阵，使得在混合态到纯态映射等场景下，总保真度作为两个二次型的比值被最大化，重建的量子信道的Kraus秩通常低于其最大可能值的百分之几。"
+  },
+  {
+    "title": "Incentivizing In-depth Reasoning over Long Contexts with Process Advantage Shaping",
+    "source": "arxiv, 2601.12465",
+    "published": "2026-01-18 16:10:04 UTC",
+    "instution": "Tongyi Lab, Alibaba Group",
+    "is_large": true,
+    "abstract": "提出KG驱动的DEEPREASONQA数据合成框架和长上下文过程优势塑造（LONGPAS）方法，通过在有效性与相关性维度上进行细粒度信用分配，利用部分正确的‘几乎成功’轨迹提升长上下文多跳推理能力，在多个基准上超越RLVR基线并匹配大参数量前沿模型的表现。"
+  },
+  {
+    "title": "Knowing When to Abstain: Medical LLMs Under Clinical Uncertainty",
+    "source": "arxiv, 2601.12471",
+    "published": "2026-01-18 16:19:29 UTC",
+    "instution": "UMass Amherst",
+    "is_large": false,
+    "abstract": "提出MedAbstain基准和评估协议，结合一致性预测、对抗性问题扰动和显式弃权选项，用于医学多选题问答中的弃权评估，发现提供显式弃权选项比输入扰动更显著提升模型的不确定性和安全弃权行为。"
+  },
+  {
+    "title": "Rethinking the AI Scientist: Interactive Multi-Agent Workflows for Scientific Discovery",
+    "source": "arxiv, 2601.12542",
+    "published": "2026-01-18 19:12:41 UTC",
+    "instution": "bio.xyz",
+    "is_large": false,
+    "abstract": "该文提出Deep Research多智能体系统，通过规划、数据分析、文献检索和新颖性检测等专用智能体协同，并维护持久化世界状态以支持上下文感知的迭代研究，将科研周期缩短至分钟级，从而实现交互式科学探索，在BixBench基准上开放回答准确率提升至48.8%，较基线提高14–26个百分点。"
+  },
+  {
+    "title": "How Clinicians Think and What AI Can Learn From It",
+    "source": "arxiv, 2601.12547",
+    "published": "2026-01-18 19:19:41 UTC",
+    "instution": "Charnock Hospital, Kolkata, India",
+    "is_large": false,
+    "abstract": "提出临床决策应基于序数优先、非补偿性决策算法，使用快速节俭树等方法在不确定性下实现稳健决策，减少因小扰动导致的动作翻转，提升决策稳定性。"
+  },
+  {
+    "title": "Ontology-aligned structuring and reuse of multimodal materials data and workflows towards automatic reproduction",
+    "source": "arxiv, 2601.12582",
+    "published": "2026-01-18 20:51:23 UTC",
+    "instution": "Ruhr-Universität Bochum",
+    "is_large": false,
+    "abstract": "提出一种基于本体对齐和大语言模型辅助的框架，从文献中自动提取并结构化堆垛层错能计算的工作流，通过多阶段过滤和提示工程提升信息提取的准确性，并实现计算协议的系统性比较与复用。"
+  },
+  {
+    "title": "Evaluating Contextually Mediated Factual Recall in Multilingual Large Language Models",
+    "source": "arxiv, 2601.12555",
+    "published": "2026-01-18 19:38:55 UTC",
+    "instution": "LMU Munich",
+    "is_large": false,
+    "abstract": "通过构建控制性提示引入指代中介的上下文句子，评估多语言大模型在目标实体嵌入自然语境而非显式查询时的事实回忆能力，发现上下文中介一致降低事实回忆准确率，且关系类型间差异显著，而更大规模模型对此更具鲁棒性。"
+  },
+  {
+    "title": "Agentic Artificial Intelligence (AI): Architectures, Taxonomies, and Evaluation of Large Language Model Agents",
+    "source": "arxiv, 2601.12560",
+    "published": "2026-01-18 19:51:16 UTC",
+    "instution": "University of Melbourne",
+    "is_large": false,
+    "abstract": "提出一种基于POMDP的统一架构分类法，将大语言模型代理分解为六个模块化维度，通过描述从线性推理到推理时推理模型的转变，提升了对代理系统设计和评估的理解。"
+  },
+  {
+    "title": "SLAP: Scalable Language-Audio Pretraining with Variable-Duration Audio and Multi-Objective Training",
+    "source": "arxiv, 2601.12594",
+    "published": "2026-01-18 21:36:19 UTC",
+    "instution": "Meta",
+    "is_large": true,
+    "abstract": "提出SLAP方法，通过109百万音频-文本对的可变时长音频和多目标训练，提升了音频-文本检索和零样本音频分类性能。"
+  },
+  {
+    "title": "A Theory of Diversity for Random Matrices with Applications to In-Context Learning of Schrödinger Equations",
+    "source": "arxiv, 2601.12587",
+    "published": "2026-01-18 21:12:54 UTC",
+    "instution": "Brown University",
+    "is_large": false,
+    "abstract": "通过提供随机矩阵集合中心化子平凡的概率下界，使得变换器神经网络在上下文学习薛定谔方程时的泛化能力得到理论保证。"
+  },
+  {
+    "title": "Life, Machine Learning, and the Search for Habitability: Predicting Biosignature Fluxes for the Habitable Worlds Observatory",
+    "source": "arxiv, 2601.12557",
+    "published": "2026-01-18 19:43:48 UTC",
+    "instution": "NASA Goddard Space Flight Center",
+    "is_large": true,
+    "abstract": "提出贝叶斯卷积神经网络和新型SQuAT模型，通过注意力机制关联光谱特征与生物信号物种，实现对宜居系外行星生物信号通量的高效预测，在不确定性量化和可解释性方面取得提升。"
+  },
+  {
+    "title": "Benchmarking Concept-Spilling Across Languages in LLMs",
+    "source": "arxiv, 2601.12549",
+    "published": "2026-01-18 19:28:26 UTC",
+    "instution": "EPFL",
+    "is_large": false,
+    "abstract": "提出一种基于多义词生成任务的评估框架，通过测量模型在九种语言中生成目标语言含义后转向主导语言含义的时机，量化语义干扰现象，发现不同模型和语言间存在显著差异，并提供可扩展的多语言语义评估基准。"
+  },
+  {
+    "title": "Learning Relativistic Geodesics and Chaotic Dynamics via Stabilized Lagrangian Neural Networks",
+    "source": "arxiv, 2601.12519",
+    "published": "2026-01-18 18:09:26 UTC",
+    "instution": "博阿齐奇大学",
+    "is_large": false,
+    "abstract": "提出Hessian正则化、改进激活函数和物理感知坐标缩放方法，使得Lagrangian神经网络在双摆系统中验证损失降低96.6%、稳定性提高90.68%，并能学习非相对论和广义相对论下的测地线运动。"
+  },
+  {
+    "title": "Mitigating Cultural Bias in LLMs via Multi-Agent Cultural Debate",
+    "source": "arxiv, 2601.12091",
+    "published": "2026-01-18 00:00:34 CST",
+    "instution": "University of Science and Technology of China",
+    "is_large": false,
+    "abstract": "提出多智能体文化辩论（MACD）框架，通过赋予智能体不同文化身份并进行跨文化协商，使得大模型在CEBiasBench上无偏见回答率提升至86.0%（相比基线69.0%）。"
+  },
+  {
+    "title": "Aletheia: What Makes RLVR For Code Verifiers Tick?",
+    "source": "arxiv, 2601.12186",
+    "published": "2026-01-18 06:30:45 CST",
+    "instution": "INSAIT",
+    "is_large": false,
+    "abstract": "通过构建开源测试平台Aletheia，系统分析RLVR训练中推理链、负样本学习和在线学习等组件的作用，发现小规模时在线学习最关键，大规模时推理训练最重要，从而提出可简化训练流程的代码验证器优化方法。"
+  },
+  {
+    "title": "SolarGPT-QA: A Domain-Adaptive Large Language Model for Educational Question Answering in Space Weather and Heliophysics",
+    "source": "arxiv, 2601.12131",
+    "published": "2026-01-18 02:18:11 CST",
+    "instution": "Utah State University",
+    "is_large": false,
+    "abstract": "使用基于LLaMA-3的领域自适应大语言模型，结合科学文献和GPT-4生成、Grok-3优化的问答数据进行训练，使得在空间天气与日球物理学教育性问答中的解释清晰度和可访问性显著提升，并在零样本设置下优于通用模型。"
+  },
+  {
+    "title": "Speculative Sampling with Reinforcement Learning",
+    "source": "arxiv, 2601.12212",
+    "published": "2026-01-18 09:31:29 CST",
+    "instution": "William & Mary",
+    "is_large": false,
+    "abstract": "提出一种基于强化学习的Re-SpS框架，通过动态调整草稿树超参数，在保持输出保真度的同时，相比EAGLE-3最多实现1.12倍的加速。"
+  },
+  {
+    "title": "DriveSafe: A Hierarchical Risk Taxonomy for Safety-Critical LLM-Based Driving Assistants",
+    "source": "arxiv, 2601.12138",
+    "published": "2026-01-18 02:50:47 CST",
+    "instution": "The Alan Turing Institute",
+    "is_large": true,
+    "abstract": "提出一种四层层次化风险分类法DriveSafe，包含129个细粒度风险类别，用于系统刻画基于大语言模型的驾驶助手在技术、法律、社会和伦理维度的安全关键性失效模式，经领域专家评审并评估了六个主流大模型对危险驾驶相关查询的拒绝行为，发现现有模型普遍存在安全响应不足的问题。"
+  },
+  {
+    "title": "Bengali Text Classification: An Evaluation of Large Language Model Approaches",
+    "source": "arxiv, 2601.12132",
+    "published": "2026-01-18 02:25:19 CST",
+    "instution": "CCN University of Science and Technology",
+    "is_large": false,
+    "abstract": "使用三个指令调优的大语言模型（LLaMA 3.1 8B、LLaMA 3.2 3B 和 Qwen 2.5 7B）对 Bengali 报纸文章进行分类，Qwen 2.5 在准确率上达到 72%，相比 LLaMA 系列模型提升了约 16-19%。"
+  },
+  {
+    "title": "UniMo: Unified Motion Generation and Understanding with Chain of Thought",
+    "source": "arxiv, 2601.12126",
+    "published": "2026-01-18 01:56:49 CST",
+    "instution": "清华大学",
+    "is_large": false,
+    "abstract": "提出UniMo框架，通过监督微调和强化学习结合链式思维推理，提升3D人体动作生成与理解的语义对齐和结构正确性，显著优于现有方法。"
+  },
+  {
+    "title": "Human-Human-AI Triadic Programming: Uncovering the Role of AI Agent and the Value of Human Partner in Collaborative Learning",
+    "source": "arxiv, 2601.12134",
+    "published": "2026-01-18 02:32:54 CST",
+    "instution": "Virginia Tech",
+    "is_large": false,
+    "abstract": "通过一项包含20名参与者的被试内研究，比较了人类-人类-AI三元编程与人类-AI配对编程，发现三元协作增强了协作学习和社会临场感，尤其是在共享AI条件下，参与者对AI生成代码的依赖显著减少。"
+  },
+  {
+    "title": "Plan, Verify and Fill: A Structured Parallel Decoding Approach for Diffusion Language Models",
+    "source": "arxiv, 2601.12247",
+    "published": "2026-01-18 11:53:01 CST",
+    "instution": "Georgia Institute of Technology",
+    "is_large": false,
+    "abstract": "The paper proposes Plan-Verify-Fill (PVF), a training-free structured parallel decoding method for Diffusion Language Models that actively plans semantic anchors, verifies structural consistency via impact sets, and fills details—reducing Number of Function Evaluations (NFE) by up to 65% without sacrificing accuracy."
+  },
+  {
+    "title": "Docs2Synth: A Synthetic Data Trained Retriever Framework for Scanned Visually Rich Documents Understanding",
+    "source": "arxiv, 2601.12260",
+    "published": "2026-01-18 12:45:09 CST",
+    "instution": "University of Western Australia",
+    "is_large": false,
+    "abstract": "Docs2Synth uses an agent-based system to automatically generate and verify synthetic QA pairs from scanned documents, trains a lightweight visual retriever on this synthetic data, and enables iterative retrieval-generation with an MLLM to reduce hallucination and improve grounding—achieving substantial gains in domain generalization and grounding on VRDU benchmarks without human annotations."
+  },
+  {
+    "title": "Less is More: Label-Guided Summarization of Procedural and Instructional Videos",
+    "source": "arxiv, 2601.12243",
+    "published": "2026-01-18 11:41:48 CST",
+    "instution": "Vellore Institute of Technology",
+    "is_large": false,
+    "abstract": "提出了一种三阶段框架PRISM，通过自适应视觉采样、标签驱动的关键帧锚定和大语言模型的上下文验证，用少于5%的帧保留84%的语义内容，并在多模态视频字幕任务中比基线提升高达33%。"
+  },
+  {
+    "title": "Wavelet-Driven Masked Multiscale Reconstruction for PPG Foundation Models",
+    "source": "arxiv, 2601.12215",
+    "published": "2026-01-18 09:34:47 CST",
+    "instution": "Samsung Research America",
+    "is_large": false,
+    "abstract": "提出基于小波的多尺度重建（MMR）自监督预训练框架，通过重构PPG信号的小波分解系数，使Transformer编码器学习跨时间和频谱尺度的信息，在17个健康相关任务上优于或匹配现有PPG基础模型，提升了多分辨率特征表示能力。"
+  },
+  {
+    "title": "Proc3D: Procedural 3D Generation and Parametric Editing of 3D Shapes with Large Language Models",
+    "source": "arxiv, 2601.12234",
+    "published": "2026-01-18 11:08:08 CST",
+    "instution": "Adobe Research",
+    "is_large": true,
+    "abstract": "利用大型语言模型结合程序化紧凑图（PCG）表示方法，实现可编辑的3D形状生成与实时参数化编辑，在编辑效率上比传统全重建方法快400倍以上，并将ULIP分数提升了28%。"
+  },
+  {
+    "title": "Simulated Annealing Enhances Theory-of-Mind Reasoning in Autoregressive Language Models",
+    "source": "arxiv, 2601.12269",
+    "published": "2026-01-18 13:51:30 CST",
+    "instution": "浙江大学",
+    "is_large": false,
+    "abstract": "提出一种基于模拟退火的采样方法，通过在序列级概率分布上进行温度调度优化，使得小语言模型的ToM推理能力显著提升。"
+  },
+  {
+    "title": "Predictive Prototyping: Evaluating Design Concepts with ChatGPT",
+    "source": "arxiv, 2601.12276",
+    "published": "2026-01-18 14:26:03 CST",
+    "instution": "新加坡科技设计大学",
+    "is_large": false,
+    "abstract": "提出一种结合检索增强生成（RAG）与GPT-4o的方法，利用Instructables.com数据预测设计原型的成本、性能和可用性，结果显示该方法比人类估计更准确，并指导构建出优于商用和拓扑优化模型的原型。"
+  },
+  {
+    "title": "Rethinking the Value of Multi-Agent Workflow: A Strong Single Agent Baseline",
+    "source": "arxiv, 2601.12307",
+    "published": "2026-01-18 16:16:09 CST",
+    "instution": "Amazon",
+    "is_large": true,
+    "abstract": "提出一种单智能体通过多轮对话和KV缓存复用的方法，模拟多智能体工作流，在七项基准任务上达到与同构多智能体相当的性能，并降低推理成本。"
+  },
+  {
+    "title": "ToolPRMBench: Evaluating and Advancing Process Reward Models for Tool-using Agents",
+    "source": "arxiv, 2601.12294",
+    "published": "2026-01-18 15:48:36 CST",
+    "instution": "Intuit AI Research",
+    "is_large": false,
+    "abstract": "提出ToolPRMBench，通过离线和在线采样构建步级测试用例，并利用多LLM验证流程减少标签噪声，实现了对工具使用代理中过程奖励模型的系统评估，显著提升了细粒度错误识别能力。"
+  },
+  {
+    "title": "Explanova: Automatically Discover Data Insights in N \\times M Table via XAI Combined LLM Workflow",
+    "source": "arxiv, 2601.12317",
+    "published": "2026-01-18 17:00:03 CST",
+    "instution": "HKUST(GZ)",
+    "is_large": false,
+    "abstract": "通过结合XAI与小规模本地LLM的预设自动化工作流，实现对N×M表格数据的洞察自动发现，在消费级GPU上高效运行，降低了大模型调用成本。"
+  },
+  {
+    "title": "MARO: Learning Stronger Reasoning from Social Interaction",
+    "source": "arxiv, 2601.12323",
+    "published": "2026-01-18 17:10:08 CST",
+    "instution": "复旦大学",
+    "is_large": false,
+    "abstract": "提出多智能体奖励优化（MARO）方法，通过分解行为奖励、平衡角色权重和直接评估行为效用，使得大语言模型在社会推理能力上显著提升，并能迁移到数学推理和指令遵循任务中。"
+  },
+  {
+    "title": "Cross-reality Location Privacy Protection in 6G-enabled Vehicular Metaverses: An LLM-enhanced Hybrid Generative Diffusion Model-based Approach",
+    "source": "arxiv, 2601.12311",
+    "published": "2026-01-18 16:40:38 CST",
+    "instution": "广东工业大学",
+    "is_large": false,
+    "abstract": "提出一种LLM增强的混合扩散模型算法，通过连续位置扰动和离散AI代理迁移，提升跨现实位置隐私保护，实验显示在真实数据集上有效减少隐私泄露并保持低延迟与服务质量。"
+  },
+  {
+    "title": "Actionable Advice from Reviews via Mixture of LoRA Experts: A Two-LLM Pipeline for Issue Extraction and Business Recommendations",
+    "source": "arxiv, 2601.12338",
+    "published": "2026-01-18 18:11:29 CST",
+    "instution": "BITS Pilani, Pilani Campus",
+    "is_large": false,
+    "abstract": "提出一种基于LoRA专家混合的两LLM框架，通过问题提取和建议生成，使业务建议的动作性和具体性显著提升，同时保持高效的效率-质量权衡。"
+  },
+  {
+    "title": "Zero-Permission Manipulation: Can We Trust Large Multimodal Model Powered GUI Agents?",
+    "source": "arxiv, 2601.12349",
+    "published": "2026-01-18 18:54:54 CST",
+    "instution": "南京大学",
+    "is_large": false,
+    "abstract": "通过利用视觉原子性失效和观察到动作的时间间隔，提出Action Rebinding攻击方法，使得零权限应用能够劫持GUI代理的执行，实现100%的原子动作重绑定成功率，并通过意图对齐策略（IAS）将绕过验证关卡的成功率从0%提升至100%。"
+  },
+  {
+    "title": "Efficient Privacy-Preserving Retrieval Augmented Generation with Distance-Preserving Encryption",
+    "source": "arxiv, 2601.12331",
+    "published": "2026-01-18 17:29:50 CST",
+    "instution": "Nanyang Technological University",
+    "is_large": false,
+    "abstract": "提出一种基于条件近似距离比较保持对称加密（CAPRISE）和差分隐私的隐私保护RAG框架ppRAG，在不泄露向量内容的前提下实现云端高效相似性检索，有效防御向量到文本重建攻击和查询分析，实验表明该方法在保证高检索精度的同时显著提升处理效率。"
+  },
+  {
+    "title": "From Prompts to Pavement: LMMs-based Agentic Behavior-Tree Generation Framework for Autonomous Vehicles",
+    "source": "arxiv, 2601.12358",
+    "published": "2026-01-18 19:32:29 CST",
+    "instution": "CARLA",
+    "is_large": true,
+    "abstract": "使用基于LLMs和LVMs的代理框架生成行为树，在CARLA+Nav2仿真中通过故障触发机制实现无需人工干预的自动驾驶，成功应对突发障碍物。"
+  },
+  {
+    "title": "Zero-Shot Embedding Drift Detection: A Lightweight Defense Against Prompt Injections in LLMs",
+    "source": "arxiv, 2601.12359",
+    "published": "2026-01-18 19:33:35 CST",
+    "instution": "Algoverse AI Research",
+    "is_large": false,
+    "abstract": "提出零样本嵌入漂移检测（ZEDD）方法，通过测量良性与可疑输入在嵌入空间中的语义偏移，实现了对多种大语言模型架构中提示注入攻击的检测，准确率超过93%，误报率低于3%。"
+  },
+  {
+    "title": "Can Deep Research Agents Find and Organize? Evaluating the Synthesis Gap with Expert Taxonomies",
+    "source": "arxiv, 2601.12369",
+    "published": "2026-01-18 19:57:09 CST",
+    "instution": "复旦大学",
+    "is_large": false,
+    "abstract": "提出TaxoBENCH基准，通过提取72篇高引论文中的专家分类体系作为真值，评估深度研究代理在检索和组织论文上的能力，发现现有方法在召回率和组织结构相似性（ARI）上均远低于人类水平。"
+  },
+  {
+    "title": "LiQSS: Post-Transformer Linear Quantum-Inspired State-Space Tensor Networks for Real-Time 6G",
+    "source": "arxiv, 2601.12375",
+    "published": "2026-01-18 20:08:38 CST",
+    "instution": "Technical University of Catalonia (UPC)",
+    "is_large": false,
+    "abstract": "提出一种量子启发的线性状态空间张量网络方法，取代自注意力机制并结合张量分解，在保持预测精度的同时，相比Transformer模型实现最高155倍的参数减少和2.74倍的推理加速。"
+  },
+  {
+    "title": "De-Anonymization at Scale via Tournament-Style Attribution",
+    "source": "arxiv, 2601.12407",
+    "published": "2026-01-18 21:49:43 CST",
+    "instution": "Peking University",
+    "is_large": false,
+    "abstract": "提出基于大语言模型的DAS方法，通过序列淘汰策略和稠密检索预筛选，在数万候选文本中进行作者归属，显著提升了大规模匿名化文本去匿名化的准确率。"
+  },
+  {
+    "title": "NADIR: Differential Attention Flow for Non-Autoregressive Transliteration in Indic Languages",
+    "source": "arxiv, 2601.12389",
+    "published": "2026-01-18 20:56:47 CST",
+    "instution": "RocketFrog AI",
+    "is_large": false,
+    "abstract": "提出NADIR模型，结合微分Transformer和专家混合机制，在多语言音译任务中实现非自回归的高效推理，相比自回归基线提速13倍以上，字符错误率降至15.78%，并在重复、替换、遗漏和插入错误上分别减少49.53%、24.45%、32.92%和16.87%。"
+  },
+  {
+    "title": "PsychēChat: An Empathic Framework Focused on Emotion Shift Tracking and Safety Risk Analysis in Psychological Counseling",
+    "source": "arxiv, 2601.12392",
+    "published": "2026-01-18 21:06:13 CST",
+    "instution": "华东理工大学",
+    "is_large": false,
+    "abstract": "提出PsycheChat，通过情感转移跟踪和安全风险分析两个模块，结合交互式角色扮演合成对话，利用Agent Mode和LLM Mode两种范式，在情感理解与安全控制方面优于现有方法。"
+  },
+  {
+    "title": "A Scalable Entity-Based Framework for Auditing Bias in LLMs",
+    "source": "arxiv, 2601.12374",
+    "published": "2026-01-18 20:07:31 CST",
+    "instution": "Université Paris-Saclay",
+    "is_large": false,
+    "abstract": "使用基于命名实体的可扩展框架生成合成数据，测量大语言模型中的结构性偏差，在19亿数据点上发现模型对右翼政治家、全球南方国家和国防医药公司存在系统性偏见，而指令微调可减少偏差但扩大模型规模会加剧偏差。"
+  },
+  {
+    "title": "Orthogonalized Policy Optimization:Decoupling Sampling Geometry from Optimization Geometry in RLHF",
+    "source": "arxiv, 2601.12415",
+    "published": "2026-01-18 21:57:44 CST",
+    "instution": "China Mobile Communications Group Shandong Co., Ltd. Tai'an Branch",
+    "is_large": false,
+    "abstract": "提出正交化策略优化（OPO），通过将采样几何与优化几何解耦，结合α加权重要性采样和χ²诱导的二次正则化，使得梯度动态线性化，在保持峰值搜索行为的同时避免高置信度下的梯度饱和，提升了训练稳定性。"
+  },
+  {
+    "title": "TrojanPraise: Jailbreak LLMs via Benign Fine-Tuning",
+    "source": "arxiv, 2601.12460",
+    "published": "2026-01-18 23:48:36 CST",
+    "instution": "Nanyang Technological University",
+    "is_large": false,
+    "abstract": "TrojanPraise fine-tunes LLMs using benign, filter-approved data—introducing a crafted word (e.g., 'bruaf') to praise harmful concepts—thereby shifting the model's safety-aligned attitude without altering its knowledge, achieving up to 95.88% jailbreak success rate while evading moderation."
+  },
+  {
+    "title": "AgenTRIM: Tool Risk Mitigation for Agentic AI",
+    "source": "arxiv, 2601.12449",
+    "published": "2026-01-18 23:10:18 CST",
+    "instution": "Fujitsu Research of Europe",
+    "is_large": false,
+    "abstract": "提出AGENTRIM框架，通过离线重建和验证工具接口、运行时动态过滤和状态感知验证，在不改变代理推理的情况下实现每步最小权限工具访问，将攻击成功率大幅降低的同时保持高任务性能。"
+  },
+  {
+    "title": "Capability-Aware Early-Stage Research Idea Evaluation",
+    "source": "arxiv, 2601.12473",
+    "published": "2026-01-19 00:22:17 CST",
+    "instution": "Northwestern Polytechnical University",
+    "is_large": false,
+    "abstract": "提出一种基于作者信息和研究想法的能力感知框架，通过三路Transformer架构融合作者能力表征，实现了对论文接收和评分的早期预测，显著优于单路径模型，并提升了预测准确率。"
+  },
+  {
+    "title": "Harmonizing the Arabic Audio Space with Data Scheduling",
+    "source": "arxiv, 2601.12494",
+    "published": "2026-01-19 01:08:31 CST",
+    "instution": "Qatar Computing Research Institute",
+    "is_large": false,
+    "abstract": "通过提出任务渐进式课程学习（TPC）和基于对齐器的多样采样（ADS）方法，在Qwen2.5-Omni模型上进行多任务指令微调，提升了阿拉伯语语音理解与生成任务的性能，其中混合TPC+ADS策略在收敛速度和任务鲁棒性之间实现了最优平衡。"
+  },
+  {
+    "title": "A Mixture of Experts Vision Transformer for High-Fidelity Surface Code Decoding",
+    "source": "arxiv, 2601.12483",
+    "published": "2026-01-19 00:49:59 CST",
+    "instution": "Hanoi University of Science and Technology",
+    "is_large": false,
+    "abstract": "提出一种基于视觉Transformer的混合专家解码器QuantumSMoE，通过加形嵌入和自适应掩码捕捉拓扑码的局部结构，并结合新颖辅助损失的混合专家层提升可扩展性，在环面码实验中优于现有机器学习和经典解码方法。"
+  },
+  {
+    "title": "Cooperative Multi-agent RL with Communication Constraints",
+    "source": "arxiv, 2601.12518",
+    "published": "2026-01-19 02:05:23 CST",
+    "instution": "CMU",
+    "is_large": true,
+    "abstract": "提出基于旧梯度预测基础策略的方法，使得在通信受限的多智能体强化学习中能有效估计梯度，减少通信轮数至O(ε⁻³/⁴)并降低样本复杂度。"
+  },
+  {
+    "title": "",
+    "source": "arxiv, 2601.12525",
+    "published": "",
+    "instution": "†",
+    "is_large": false,
+    "abstract": "提出一种算法，在使用条件熵时以摊销时间O(α⁻¹(1 + m log d)log log n)找到(1 + α)近似最优特征，使得在稀疏数据流中二元特征的决策树分裂速度加快，且实验显示其比基线方法更快并超出理论近似保证。"
+  },
+  {
+    "title": "Improved Bug Localization with AI Agents Leveraging Hypothesis and Dynamic Cognition",
+    "source": "arxiv, 2601.12522",
+    "published": "2026-01-19 02:12:21 CST",
+    "instution": "Dalhousie University",
+    "is_large": false,
+    "abstract": "提出一种名为CogniGent的多AI代理技术，通过因果推理、调用图分析和上下文管理，在假设检验和动态认知调试的指导下，实现了文档和方法级别上23.33-38.57%的MAP提升。"
+  },
+  {
+    "title": "",
+    "source": "arxiv, 2601.12534",
+    "published": "",
+    "instution": "University of Southern California",
+    "is_large": false,
+    "abstract": "提出一种基于自监督眼动重建的GLASS模型，利用低分辨率视频中提取的眼动信息，在语音情感估计和情感行为预测任务中提升了情绪识别效果。"
+  },
+  {
+    "title": "Agentic Reasoning for Large Language Models",
+    "source": "arxiv, 2601.12538",
+    "published": "2026-01-19 02:58:23 CST",
+    "instution": "University of Illinois Urbana-Champaign",
+    "is_large": false,
+    "abstract": "通过将大语言模型重构为自主代理，提出基于规划、行动和持续学习的代理推理框架，在开放动态环境中提升了推理能力。"
+  },
+  {
+    "title": "",
+    "source": "arxiv, 2601.12505",
+    "published": "",
+    "instution": "Arizona State University",
+    "is_large": false,
+    "abstract": "提出DoPE框架，通过在PDF/HTML考试文档中嵌入语义诱饵以利用MLLM解析差异，实现对AI的防御与检测，在OpenAI和Anthropic的黑盒模型上达到91.4%检测率（8.7%误报率），并使96.3%的AI尝试失败或被诱骗。"
+  },
+  {
+    "title": "",
+    "source": "arxiv, 2601.12585",
+    "published": "",
+    "instution": "University of Toronto",
+    "is_large": false,
+    "abstract": "使用reVLAT数据集和四类SOTA MLLM模型，通过错误响应的开放编码分析，提出了一种针对MLLM可视化素养障碍的分类法，揭示了两类机器特有的障碍，并发现模型在颜色密集型和基于分段的可视化图表上推理能力较差。"
+  },
+  {
+    "title": "Disagreement as Data: Reasoning Trace Analytics in Multi-Agent Systems",
+    "source": "arxiv, 2601.12618",
+    "published": "2026-01-19 07:19:49 CST",
+    "instution": "Carnegie Mellon University",
+    "is_large": true,
+    "abstract": "The study applies cosine similarity to LLM reasoning traces from multi-agent systems to detect and quantify disagreement among agents, enabling systematic identification of interpretive ambiguity; this method robustly differentiates consensus from disagreement and correlates with human coding reliability, thereby improving inter-rater reliability establishment in qualitative coding."
+  },
+  {
+    "title": "",
+    "source": "arxiv, 2601.12554",
+    "published": "",
+    "instution": "Luxembourg Institute of Science and Technology (LIST)",
+    "is_large": false,
+    "abstract": "综述了机器学习、深度学习及生成式AI等方法在材料科学中的应用，通过改进数据表示和预处理策略，提升了材料性能预测、逆向设计和工艺优化的效率与准确性。"
+  },
+  {
+    "title": "Objective Matters: Fine-Tuning Objectives Shape Safety, Robustness, and Persona Drift",
+    "source": "arxiv, 2601.12639",
+    "published": "2026-01-19 09:04:43 CST",
+    "instution": "University of Cincinnati",
+    "is_large": false,
+    "abstract": "通过控制六种微调目标，在固定数据、领域、架构和优化条件下，发现目标选择在小规模时对安全性影响小，但在大规模时显著影响对抗鲁棒性和潜在人格稳定性，其中ORPO和KL正则化能有效缓解安全风险。"
+  },
+  {
+    "title": "STEP-LLM: Generating CAD STEP Models from Natural Language with Large Language Models",
+    "source": "arxiv, 2601.12641",
+    "published": "2026-01-19 09:10:49 CST",
+    "instution": "Northwestern University",
+    "is_large": false,
+    "abstract": "提出一种基于大语言模型的STEP-LLM方法，通过深度优先搜索线性化和检索增强生成，结合强化学习优化几何奖励，实现从自然语言生成高保真STEP模型，几何精度相比Text2CAD显著提升。"
+  },
+  {
+    "title": "A Cloud-based Multi-Agentic Workflow for Science",
+    "source": "arxiv, 2601.12607",
+    "published": "2026-01-19 06:37:09 CST",
+    "instution": "Pacific Northwest National Laboratory",
+    "is_large": false,
+    "abstract": "提出一种基于云的多智能体工作流，通过 supervisor 代理调度多个专用代理，实现了90%的任务正确路由和97.5%的合成任务成功率，同时在真实世界任务中达到91%的完成率。"
+  },
+  {
+    "title": "A Two-Stage GPU Kernel Tuner Combining Semantic Refactoring and Search-Based Optimization",
+    "source": "arxiv, 2601.12698",
+    "published": "2026-01-19 11:40:12 CST",
+    "instution": "Nankai University",
+    "is_large": false,
+    "abstract": "提出一种基于模板的重写层与搜索优化结合的方法，通过语义重构生成可参数化模板并进行搜索调优，实现了超过3倍的性能提升。"
+  },
+  {
+    "title": "Augmenting Question Answering with A Hybrid RAG Approach",
+    "source": "arxiv, 2601.12658",
+    "published": "2026-01-19 10:08:47 CST",
+    "instution": "Google",
+    "is_large": true,
+    "abstract": "提出一种结合查询增强、代理路由和结构化检索的混合RAG方法（SSRAG），在TruthfulQA、SQuAD和WikiQA数据集上跨五个大模型显著提升了问答准确性和事实一致性。"
+  },
+  {
+    "title": "Intelligent Documentation in Medical Education: Can AI Replace Manual Case Logging?",
+    "source": "arxiv, 2601.12648",
+    "published": "2026-01-19 09:45:51 CST",
+    "instution": "University of California, Davis",
+    "is_large": false,
+    "abstract": "使用大型语言模型（LLMs）从放射科报告中自动提取结构化操作数据，使得放射科培训中的病例日志记录自动化成为可能，在Qwen-2.5和Claude-3.5模型上分别达到86.66和86.89的F1分数，并有望每年为每位住院医师节省超过35小时的手动记录时间。"
+  },
+  {
+    "title": "Decentralized Learning Strategies for Estimation Error Minimization with Graph Neural Networks",
+    "source": "arxiv, 2601.12662",
+    "published": "2026-01-19 10:18:45 CST",
+    "instution": "University of Pennsylvania",
+    "is_large": false,
+    "abstract": "提出了一种结合图神经网络的多智能体强化学习框架，使得在动态但结构相似的多跳无线网络中估计误差最小化，实验表明该方法优于现有基线，且策略具有跨网络结构的可迁移性。"
+  },
+  {
+    "title": "BlocksecRT-DETR: Decentralized Privacy-Preserving and Token-Efficient Federated Transformer Learning for Secure Real-Time Object Detection in ITS",
+    "source": "arxiv, 2601.12693",
+    "published": "2026-01-19 11:29:55 CST",
+    "instution": "University of Louisiana at Lafayette",
+    "is_large": false,
+    "abstract": "提出一种基于区块链保护的RT-DETR与Token工程模块（TEM）的方法，通过在边缘设备上剪枝低效token，减少47.8%的编码器FLOPs并提升17.2%推理延迟，同时保持89.20% mAP@0.5的检测精度，实现安全、高效且隐私保护的联邦实时目标检测。"
+  },
+  {
+    "title": "Neurosymbolic LoRA: Why and When to Tune Weights vs. Rewrite Prompts",
+    "source": "arxiv, 2601.12711",
+    "published": "2026-01-19 12:24:49 CST",
+    "instution": "UT Austin",
+    "is_large": false,
+    "abstract": "提出一种基于奖励分类器的神经符号LoRA框架，通过在需要深度事实重构时使用LoRA、在需要细粒度控制时使用TextGrad，动态结合数值参数更新与符号提示编辑，在多个LLM主干上持续超越纯数值或纯符号基线方法。"
+  },
+  {
+    "title": "Resource-Conscious RL Algorithms for Deep Brain Stimulation",
+    "source": "arxiv, 2601.12699",
+    "published": "2026-01-19 11:45:08 CST",
+    "instution": "UNC Chapel Hill",
+    "is_large": false,
+    "abstract": "提出一种时间与阈值触发的多臂老虎机（T3P MAB）强化学习方法，用于深度脑刺激，无需离线训练即可在植入设备上运行，联合调节刺激频率和幅度，在抑制帕金森症状的同时，相比现有深度强化学习方法显著降低了能耗。"
+  },
+  {
+    "title": "AI-exhibited Personality Traits Can Shape Human Self-concept through Conversations",
+    "source": "arxiv, 2601.12727",
+    "published": "2026-01-19 13:16:57 CST",
+    "instution": "National University of Singapore",
+    "is_large": false,
+    "abstract": "通过与具有可测量人格特质的LLM-based AI聊天机器人进行个人话题对话，使得用户自我概念与其对齐，且对话时间越长对齐程度越高，从而提升了自我概念在用户间的同质化。"
+  },
+  {
+    "title": "VISPA: Pluralistic Alignment via Automatic Value Selection and Activation",
+    "source": "arxiv, 2601.12758",
+    "published": "2026-01-19 14:38:52 CST",
+    "instution": "University of Waterloo",
+    "is_large": false,
+    "abstract": "提出一种无需训练的多元对齐框架VISPA，通过自动选择和激活内部模型机制来动态控制价值观表达，在医疗和通用领域多个模型上实现了多种多元对齐模式的性能提升。"
+  },
+  {
+    "title": "Towards Robust Process Reward Modeling via Noise-aware Learning",
+    "source": "arxiv, 2601.12748",
+    "published": "2026-01-19 14:03:58 CST",
+    "instution": "中国科学院计算技术研究所",
+    "is_large": false,
+    "abstract": "提出一种两阶段噪声感知学习框架，通过反思感知的标签修正机制和噪声感知迭代训练，抑制蒙特卡洛估计中的标签噪声，使得步骤级正确性判别平均F1提升最多27%。"
+  },
+  {
+    "title": "TreeWriter: AI-Assisted Hierarchical Planning and Writing for Long-Form Documents",
+    "source": "arxiv, 2601.12740",
+    "published": "2026-01-19 13:39:35 CST",
+    "instution": "University of Toronto",
+    "is_large": false,
+    "abstract": "TreeWriter introduces a hierarchical, tree-structured writing system with integrated AI agents that dynamically navigate document structure and provide context-aware editing suggestions, improving idea exploration/development, AI helpfulness, and perceived authorial control by 27–43% over Google Docs + Gemini in long-document tasks."
+  },
+  {
+    "title": "PAIR-SAFE: A Paired-Agent Approach for Runtime Auditing and Refining AI-Mediated Mental Health Support",
+    "source": "arxiv, 2601.12754",
+    "published": "2026-01-19 14:20:57 CST",
+    "instution": "University of Illinois Urbana-Champaign",
+    "is_large": false,
+    "abstract": "提出一种配对代理框架PAIR-SAFE，通过集成响应代理和基于MITI-4临床验证框架的监督法官代理，在运行时审计和改进AI生成的心理健康支持，显著提升了伙伴关系、寻求合作和整体关系质量等关键MITI维度。"
+  },
+  {
+    "title": "Semi-supervised Instruction Tuning for Large Language Models on Text-Attributed Graphs",
+    "source": "arxiv, 2601.12807",
+    "published": "2026-01-19 16:10:53 CST",
+    "instution": "University of Bristol",
+    "is_large": false,
+    "abstract": "The paper proposes SIT-Graph, a semi-supervised instruction tuning pipeline that uses iterative self-training with confidence-filtered pseudo-responses on unlabeled nodes, enabling LLMs to leverage structural correlations in text-attributed graphs and achieving over 20% improvement in node classification under low label ratio settings."
+  },
+  {
+    "title": "Who Does This Name Remind You of? Nationality Prediction via Large Language Model Associative Memory",
+    "source": "arxiv, 2601.12771",
+    "published": "2026-01-19 14:59:53 CST",
+    "instution": "Kansai University",
+    "is_large": false,
+    "abstract": "提出了一种名为LAMA的新框架，利用大语言模型的世界知识作为联想记忆，通过回忆同名名人并聚合其国籍进行间接推理，在99个国家的国籍预测任务中达到0.817准确率，显著优于传统方法。"
+  },
+  {
+    "title": "Do Clinical Question Answering Systems Really Need Specialised Medical Fine Tuning?",
+    "source": "arxiv, 2601.12812",
+    "published": "2026-01-19 16:17:55 CST",
+    "instution": "Stanford University",
+    "is_large": true,
+    "abstract": "提出了一种名为MEDASSESS-X的推理时对齐框架，通过轻量级引导向量在不进行领域微调的情况下提升临床问答系统的性能，使准确性提高最多6%，事实一致性提高7%，安全错误率降低达50%。"
+  },
+  {
+    "title": "Teaching LLMs to Learn Tool Trialing and Execution through Environment Interaction",
+    "source": "arxiv, 2601.12762",
+    "published": "2026-01-19 14:46:33 CST",
+    "instution": "东北大学",
+    "is_large": false,
+    "abstract": "提出ToolMaster框架，通过环境交互中的试错与执行范式训练大语言模型，使其在面对未见过或不熟悉的工具时，工具使用泛化能力和鲁棒性显著提升，相比基线模型准确率提高超过7%。"
+  },
+  {
+    "title": "MirrorGuard: Toward Secure Computer-Use Agents via Simulation-to-Real Reasoning Correction",
+    "source": "arxiv, 2601.12822",
+    "published": "2026-01-19 16:32:09 CST",
+    "instution": "复旦大学",
+    "is_large": false,
+    "abstract": "提出一种基于模拟训练的推理修正方法，通过神经符号模拟生成高风险GUI交互轨迹，在仿真环境中拦截和修正不安全推理链，使ByteDance UI-TARS系统的不安全率从66.5%降至13.0%。"
+  },
+  {
+    "title": "SCULPT: Constraint-Guided Pruned MCTS that Carves Efficient Paths for Mathematical Reasoning",
+    "source": "arxiv, 2601.12842",
+    "published": "2026-01-19 16:55:46 CST",
+    "instution": "Jilin Jianzhu University",
+    "is_large": false,
+    "abstract": "提出一种基于约束引导的MCTS方法SCULPT，通过引入符号检查和结构模式指导对动作进行评分与剪枝，在多个数据集上稳定提升了数学推理准确率，同时减少了34.2%的无效分支。"
+  },
+  {
+    "title": "Race, Ethnicity and Their Implication on Bias in Large Language Models",
+    "source": "arxiv, 2601.12868",
+    "published": "2026-01-19 17:24:24 CST",
+    "instution": "University of Aberdeen",
+    "is_large": false,
+    "abstract": "使用基于探测、神经元级归因和定向干预的可复现解释性管道，分析三个开源大模型在毒性生成和临床叙事理解任务中对种族和族裔信息的表征机制，发现抑制相关神经元可减少偏见但残留效应显著，表明行为改变而非表征改变。"
+  },
+  {
+    "title": "Communication Methods in Multi-Agent Reinforcement Learning",
+    "source": "arxiv, 2601.12886",
+    "published": "2026-01-19 17:39:00 CST",
+    "instution": "Johannes Kepler University Linz",
+    "is_large": false,
+    "abstract": "通过分析29篇文献，评估了显式、隐式、基于注意力、基于图和分层/基于角色的通信方法，指出没有适用于所有问题的最优通信框架，通信选择高度依赖具体问题，并强调低计算开销对可扩展性的重要性。"
+  },
+  {
+    "title": "Human Emotion Verification by Action Languages via Answer Set Programming",
+    "source": "arxiv, 2601.12912",
+    "published": "2026-01-19 18:06:21 CST",
+    "instution": "Umeå University",
+    "is_large": false,
+    "abstract": "本文提出基于回答集编程（ASP）和转移系统的动作语言C-MT，通过形式化心理理论（如情绪评估理论）将情绪建模为多维心理状态，并引入新型因果规则‘forbids to cause’以约束心理状态转移；该方法支持对情绪演化轨迹的可控推理与验证，从而减少交互行为引发的不良心理副作用。"
+  },
+  {
+    "title": "Injecting Knowledge from Social Science Journals to Improve Indonesian Cultural Understanding by LLMs",
+    "source": "arxiv, 2601.12921",
+    "published": "2026-01-19 18:22:50 CST",
+    "instution": "Nanyang Technological University",
+    "is_large": false,
+    "abstract": "The authors extract Indonesian cultural facts from 151 open-access social science journals to build the IndoSoSci dataset, then inject this knowledge into LLMs via retrieval-augmented generation (RAG) using LLM-generated hypothetical documents as queries, achieving a new state-of-the-art 81.4% accuracy on the IndoCulture benchmark—up by 2.9 percentage points over prior SOTA."
+  },
+  {
+    "title": "From Prefix Cache to Fusion RAG Cache: Accelerating LLM Inference in Retrieval-Augmented Generation",
+    "source": "arxiv, 2601.12904",
+    "published": "2026-01-19 17:59:39 CST",
+    "instution": "Tsinghua University",
+    "is_large": false,
+    "abstract": "提出FusionRAG框架，通过在离线预处理阶段嵌入相关文本块信息并在在线重处理阶段重新计算关键token的KVCache，使得在少于15%的重计算比例下，生成质量显著提升，归一化F1分数最高提高70%，同时TTFT减少2.66-9.39倍。"
+  },
+  {
+    "title": "CooperLLM: Cloud-Edge-End Cooperative Federated Fine-tuning for LLMs via ZOO-based Gradient Correction",
+    "source": "arxiv, 2601.12917",
+    "published": "2026-01-19 18:17:08 CST",
+    "instution": "中国科学技术大学",
+    "is_large": false,
+    "abstract": "提出CooperLLM框架，通过基于ZOO的梯度校正方法，在云-边-端协同联邦微调中减少设备端内存达86.4%，加速收敛8.8倍，并在复杂任务上比现有ZOO基线提升最高10个百分点的准确率。"
+  },
+  {
+    "title": "A Component-Based Survey of Interactions between Large Language Models and Multi-Armed Bandits",
+    "source": "arxiv, 2601.12945",
+    "published": "2026-01-19 18:53:57 CST",
+    "instution": "中国农业大学",
+    "is_large": false,
+    "abstract": "通过组件级的双向交互方法，系统性综述大语言模型与多臂赌博机算法的相互增强，其中MAB解决LLM从预训练到个性化等挑战，LLM则重构MAB的核心组件以提升序列决策性能。"
+  },
+  {
+    "title": "Bridging the Knowledge-Action Gap by Evaluating LLMs in Dynamic Dental Clinical Scenarios",
+    "source": "arxiv, 2601.12974",
+    "published": "2026-01-19 19:36:39 CST",
+    "instution": "Medlinker Intelligent and Digital Technology Co., Ltd",
+    "is_large": false,
+    "abstract": "提出SCMPE基准，通过从静态知识评估到动态工作流模拟的方法，揭示大语言模型在牙科临床对话中性能下降的主要瓶颈在于主动信息收集和动态状态跟踪，而非知识保留，并量化了检索增强生成（RAG）在动态流程中效果有限且异质。"
+  },
+  {
+    "title": "Early Prediction of Type 2 Diabetes Using Multimodal data and Tabular Transformers",
+    "source": "arxiv, 2601.12981",
+    "published": "2026-01-19 19:55:41 CST",
+    "instution": "Hamad Bin Khalifa University",
+    "is_large": false,
+    "abstract": "The study uses a tabular transformer (TabTrans) architecture on longitudinal EHR and DXA data to predict early Type 2 Diabetes Mellitus risk, achieving ≥79.7% ROC AUC—outperforming generative AI models (Claude 3.5 Sonnet, GPT-4, Gemini Pro) but underperforming conventional ML models."
+  },
+  {
+    "title": "The Bitter Lesson of Diffusion Language Models for Agentic Workflows: A Comprehensive Reality Check",
+    "source": "arxiv, 2601.12979",
+    "published": "2026-01-19 19:45:39 CST",
+    "instution": "Southeast University",
+    "is_large": false,
+    "abstract": "通过引入DiffuAgent多智能体评估框架，发现当前扩散语言模型在非因果角色中有效，但在因果规划和格式敏感任务中表现不佳，需将精确的逻辑推理机制融入去噪过程以提升智能体任务性能。"
+  },
+  {
+    "title": "RAGExplorer: A Visual Analytics System for the Comparative Diagnosis of RAG Systems",
+    "source": "arxiv, 2601.12991",
+    "published": "2026-01-19 20:09:56 CST",
+    "instution": "Zhejiang University",
+    "is_large": false,
+    "abstract": "RAGExplorer introduces a visual analytics system with coordinated views (Component Configuration, Performance Overview, Failure Attribution, and Instance Diagnosis) to enable macro-to-micro comparative diagnosis of RAG configurations, allowing developers to identify top-performing designs, quantify failure pattern shifts between configurations, and interactively verify root causes—demonstrated via case studies and user studies to effectively support RAG optimization."
+  },
+  {
+    "title": "Graph Reasoning Paradigm: Structured and Symbolic Reasoning with Topology-Aware Reinforcement Learning for Large Language Models",
+    "source": "arxiv, 2601.12995",
+    "published": "2026-01-19 20:23:00 CST",
+    "instution": "Harbin Institute of Technology",
+    "is_large": false,
+    "abstract": "The authors propose the Graph Reasoning Paradigm (GRP) with Process-Aware Stratified Clipping Group Relative Policy Optimization (PASC-GRPO), which replaces plain-text reasoning with graph-structured symbolic representations and semantic evaluation with structure-based evaluation, achieving significant improvements in mathematical reasoning and code generation tasks—though exact quantitative gains (e.g., percentage lifts) are not specified in the provided abstract."
+  },
+  {
+    "title": "OFA-MAS: One-for-All Multi-Agent System Topology Design based on Mixture-of-Experts Graph Generative Models",
+    "source": "arxiv, 2601.12996",
+    "published": "2026-01-19 20:23:44 CST",
+    "instution": "Griffith University",
+    "is_large": false,
+    "abstract": "提出一种基于任务感知图状态编码器和专家混合架构的统一图生成框架OFA-MAS，通过三阶段训练策略生成自适应多智能体系统拓扑，在六个基准上显著优于专用模型。"
+  },
+  {
+    "title": "PASs-MoE: Mitigating Misaligned Co-drift among Router and Experts via Pathway Activation Subspaces for Continual Learning",
+    "source": "arxiv, 2601.13020",
+    "published": "2026-01-19 20:57:11 CST",
+    "instution": "Chinese Academy of Sciences",
+    "is_large": false,
+    "abstract": "提出基于路径激活子空间（PASs）的MoE-LoRA方法，通过PAS引导的重加权和PAS感知的秩稳定化，缓解路由器与专家间的错位共漂移，在不增加参数的情况下提升了持续学习中的准确性和抗遗忘能力。"
+  },
+  {
+    "title": "ArchAgent: Scalable Legacy Software Architecture Recovery with LLMs",
+    "source": "arxiv, 2601.13007",
+    "published": "2026-01-19 20:39:05 CST",
+    "instution": "HiThink Research",
+    "is_large": false,
+    "abstract": "提出了一种结合静态分析、自适应代码分割和LLM驱动合成的可扩展代理框架ArchAgent，用于从跨仓库代码库中重构多视角、业务对齐的架构，在典型大规模GitHub项目评估中显著优于现有基准。"
+  },
+  {
+    "title": "Tears or Cheers? Benchmarking LLMs via Culturally Elicited Distinct Affective Responses",
+    "source": "arxiv, 2601.13024",
+    "published": "2026-01-19 21:04:26 CST",
+    "instution": "Monash University",
+    "is_large": false,
+    "abstract": "提出一种利用LLM生成初步标签并结合人工评估构建多模态基准CEDAR的方法，用于衡量文化引发的差异化情感反应，揭示当前多语言模型在文化对齐方面存在显著不足。"
+  },
+  {
+    "title": "MagicGUI-RMS: A Multi-Agent Reward Model System for Self-Evolving GUI Agents via Automated Feedback Reflux",
+    "source": "arxiv, 2601.13060",
+    "published": "2026-01-19 21:50:43 CST",
+    "instution": "Honor Device Co., Ltd",
+    "is_large": false,
+    "abstract": "提出一种多智能体奖励模型系统MagicGUI-RMS，结合领域特定与通用奖励模型，通过自动化反馈回流机制实现GUI代理的自我演化，显著提升了任务准确性和行为鲁棒性。"
+  },
+  {
+    "title": "Typhoon ASR Real-time: FastConformer-Transducer for Thai Automatic Speech Recognition",
+    "source": "arxiv, 2601.13044",
+    "published": "2026-01-19 21:28:17 CST",
+    "instution": "Typhoon, SCB 10X",
+    "is_large": false,
+    "abstract": "通过严格的文本归一化和两阶段课程学习，使用115M参数的FastConformer-Transducer模型在降低45倍计算成本的同时，实现了与Whisper Large-v3相当的泰语语音识别准确率。"
+  },
+  {
+    "title": "Leveraging Lora Fine-Tuning and Knowledge Bases for Construction Identification",
+    "source": "arxiv, 2601.13105",
+    "published": "2026-01-19 22:43:11 CST",
+    "instution": "Sichuan International Studies University",
+    "is_large": false,
+    "abstract": "通过结合基于LoRA的微调和检索增强生成框架，对大语言模型进行微调，使其在英语双及物构式的自动识别中实现了0.936的准确率和0.874的F1分数。"
+  },
+  {
+    "title": "METIS: Mentoring Engine for Thoughtful Inquiry & Solutions",
+    "source": "arxiv, 2601.13075",
+    "published": "2026-01-19 22:10:35 CST",
+    "instution": "Lossfunk",
+    "is_large": false,
+    "abstract": "使用工具增强和阶段感知的AI导师METIS，通过文献搜索、指南检索和方法检查等方法，在研究写作的多个阶段中相较于GPT-5和Claude Sonnet 4.5提升了学生写作质量，LLM裁判评估中对METIS的偏好分别达到71%和54%。"
+  },
+  {
+    "title": "Adversarial Alignment: Ensuring Value Consistency in Large Language Models for Sensitive Domains",
+    "source": "arxiv, 2601.13137",
+    "published": "2026-01-19 23:21:26 CST",
+    "instution": "Minzu University of China",
+    "is_large": false,
+    "abstract": "通过提出对抗对齐框架，结合持续预训练、指令微调和对抗训练（由Attacker生成争议性查询、Actor生成价值一致响应、Critic过滤响应质量），提升了大语言模型在敏感领域（种族、社会、政治）的价值一致性，在中英文双语评测中优于主流模型。"
+  },
+  {
+    "title": "IntAgent: NWDAF-Based Intent LLM Agent Towards Advanced Next Generation Networks",
+    "source": "arxiv, 2601.13114",
+    "published": "2026-01-19 22:55:48 CST",
+    "instution": "University of Guelph",
+    "is_large": false,
+    "abstract": "通过在NWDAF分析引擎中集成意图工具引擎和MCP工具服务器，利用实时网络分析实现对网络操作意图的自主 fulfillment，在交通预测和策略执行两个用例中验证了框架的有效性。"
+  },
+  {
+    "title": "CORE-T: COherent REtrieval of Tables for Text-to-SQL",
+    "source": "arxiv, 2601.13111",
+    "published": "2026-01-19 22:51:23 CST",
+    "instution": "TU Darmstadt",
+    "is_large": false,
+    "abstract": "使用LLM生成的表目的元数据和预计算的兼容性缓存，通过密集检索和单次LLM调用选择连贯子集的方法，使得多表检索F1值最高提升22.7点，同时减少42%的检索表数量，并将执行准确率在BIRD上提升5.0点、MMQA上提升6.9点，且比LLM密集基线方法少用4-5倍的token。"
+  },
+  {
+    "title": "Agentic Conversational Search with Contextualized Reasoning via Reinforcement Learning",
+    "source": "arxiv, 2601.13115",
+    "published": "2026-01-19 22:55:54 CST",
+    "instution": "Amazon.com",
+    "is_large": true,
+    "abstract": "提出一种基于强化学习的对话代理框架，通过上下文化推理交错搜索与生成，提升多轮对话场景下的信息检索与回答生成性能，在四个基准上超越现有强基线方法。"
+  },
+  {
+    "title": "TVWorld: Foundations for Remote-Control TV Agents",
+    "source": "arxiv, 2601.13142",
+    "published": "2026-01-19 23:24:32 CST",
+    "instution": "The University of Hong Kong",
+    "is_large": false,
+    "abstract": "提出一种拓扑感知训练框架，注入拓扑意识到大视觉语言模型中，使得TVTheseus在TVWorld-N上成功率提升至68.3%，并在TVWorld-G上达到81.8的准确率。"
+  },
+  {
+    "title": "FastAV: Efficient Token Pruning for Audio-Visual Large Language Model Inference",
+    "source": "arxiv, 2601.13143",
+    "published": "2026-01-19 23:24:51 CST",
+    "instution": "Korea Advanced Institute of Science and Technology",
+    "is_large": false,
+    "abstract": "FastAV uses attention rollout–guided two-stage token pruning (global pruning in middle layers, fine pruning in later layers based on last-query-token importance) to reduce FLOPs by over 40% on AV-LLMs while preserving or improving performance."
+  },
+  {
+    "title": "Probe and Skip: Self-Predictive Token Skipping for Efficient Long-Context LLM Inference",
+    "source": "arxiv, 2601.13155",
+    "published": "2026-01-19 23:34:29 CST",
+    "instution": "Beihang University",
+    "is_large": false,
+    "abstract": "提出一种无需训练的自预测令牌跳过方法SPTS，通过部分注意力探测和低秩变换探测，在保持模型性能的同时，实现预填充和端到端生成最高2.46倍和2.29倍的加速。"
+  },
+  {
+    "title": "Training instability in deep learning follows low-dimensional dynamical principles",
+    "source": "arxiv, 2601.13160",
+    "published": "2026-01-19 23:37:45 CST",
+    "instution": "China Mobile Research Institute",
+    "is_large": false,
+    "abstract": "通过受控扰动审计训练轨迹，发现低维潜隐元状态的偏差系统性地先于性能崩溃，从而将训练稳定性建模为可测量的动态属性。"
+  },
+  {
+    "title": "Prompt Injection Mitigation with Agentic AI, Nested Learning, and AI Sustainability via Semantic Caching",
+    "source": "arxiv, 2601.13186",
+    "published": "2026-01-20 00:10:11 CST",
+    "instution": "Thesisquare",
+    "is_large": false,
+    "abstract": "提出一种结合三阶段代理管道与语义相似性缓存的方法，在301个聚焦注入的提示上实现安全响应，显著减少高风险漏洞，并通过41.6%的计算负载降低提升环境可持续性。"
+  },
+  {
+    "title": "Beyond Single-shot Writing: Deep Research Agents are Unreliable at Multi-turn Report Revision",
+    "source": "arxiv, 2601.13217",
+    "published": "2026-01-20 00:48:45 CST",
+    "instution": "New York University",
+    "is_large": false,
+    "abstract": "提出多轮报告修订评估套件MR DRE，通过统一的长篇报告评估协议和人工验证的反馈模拟管道，发现现有深度研究代理在处理用户反馈时会退化16-27%的已有内容和引用质量。"
+  },
+  {
+    "title": "Insider Knowledge: How Much Can RAG Systems Gain from Evaluation Secrets?",
+    "source": "arxiv, 2601.13227",
+    "published": "2026-01-20 01:03:20 CST",
+    "instution": "Johns Hopkins University",
+    "is_large": false,
+    "abstract": "通过修改CRUCIBLE以针对LLM裁判优化输出，研究发现当评估细节（如提示模板或黄金nuggets）泄露时，RAG系统可获得接近完美的评分，揭示了盲评和方法多样化的必要性。"
+  },
+  {
+    "title": "A Semantic Decoupling-Based Two-Stage Rainy-Day Attack for Revealing Weather Robustness Deficiencies in Vision-Language Models",
+    "source": "arxiv, 2601.13238",
+    "published": "2026-01-20 01:16:30 CST",
+    "instution": "Chengyin Hu",
+    "is_large": false,
+    "abstract": "提出基于语义解耦的两阶段参数化扰动模型，通过建模多尺度雨滴和降雨引起的光照变化，在非像素参数空间生成物理合理的天气扰动，使得主流视觉-语言模型的语义对齐性能显著下降。"
+  },
+  {
+    "title": "Real-Time Deadlines Reveal Temporal Awareness Failures in LLM Strategic Dialogues",
+    "source": "arxiv, 2601.13206",
+    "published": "2026-01-20 00:31:07 CST",
+    "instution": "University of Pennsylvania",
+    "is_large": false,
+    "abstract": "通过在严格实时截止条件下模拟成对代理的谈判，使用时间感知反馈的方法，使得GPT-5.1的交易达成率从4%提升至32%，且在基于回合限制下接近完美表现，揭示LLM在连续时间推理中存在系统性时间感知缺陷。"
+  },
+  {
+    "title": "KOCO-BENCH: Can Large Language Models Leverage Domain Knowledge in Software Development?",
+    "source": "arxiv, 2601.13240",
+    "published": "2026-01-20 01:20:16 CST",
+    "instution": "Peking University",
+    "is_large": false,
+    "abstract": "提出KOCO-BENCH，通过提供领域知识语料库和多粒度评估任务，使得大模型在软件开发中利用领域知识的能力得到评估，但现有方法仅实现边际提升，Claude Code最高仅达到34.2%的性能。"
+  },
+  {
+    "title": "A Comprehensive Evaluation of LLM Reasoning: From Single-Model to Multi-Agent Paradigms",
+    "source": "arxiv, 2601.13243",
+    "published": "2026-01-20 01:23:45 CST",
+    "instution": "哈尔滨工业大学",
+    "is_large": false,
+    "abstract": "通过统一评估从单模型到多智能体系统的推理范式，并引入MIMeBench新基准测试，结合角色隔离分析和成本-准确性权衡研究，发现结构复杂性增加并不总能提升推理性能，其效果高度依赖范式本身的适用性。"
+  },
+  {
+    "title": "Improving the Safety and Trustworthiness of Medical AI via Multi-Agent Evaluation Loops",
+    "source": "arxiv, 2601.13268",
+    "published": "2026-01-20 02:10:34 CST",
+    "instution": "Iowa State University",
+    "is_large": false,
+    "abstract": "通过结合两个生成模型和两个基于AMA伦理原则与SRA-5协议的评估代理，构建多智能体迭代评估循环，在900个临床多样化查询上实现了89%的伦理违规减少和92%的风险降级率。"
+  },
+  {
+    "title": "Balancing Classification and Calibration Performance in Decision-Making LLMs via Calibration Aware Reinforcement Learning",
+    "source": "arxiv, 2601.13284",
+    "published": "2026-01-20 02:31:31 CST",
+    "instution": "AWS AI Labs",
+    "is_large": true,
+    "abstract": "提出一种校准感知的强化学习方法，通过直接调整决策标记概率，在保持RLVR准确性的同时减少过置信，使ECE分数最多降低9点。"
+  },
+  {
+    "title": "Do Instruction-Tuned Models Always Perform Better Than Base Models? Evidence from Math and Domain-Shifted Benchmarks",
+    "source": "arxiv, 2601.13244",
+    "published": "2026-01-20 01:26:49 CST",
+    "instution": "M42",
+    "is_large": false,
+    "abstract": "通过在标准数学基准、结构扰动变体和领域偏移任务上评估基础模型和指令微调模型，发现指令微调的优势依赖于特定提示模式而非内在推理能力，在零样本CoT设置下基础模型性能优于指令微调模型，最高提升达32.67%（Llama3-70B），且在分布偏移下指令微调模型表现更差。"
+  },
+  {
+    "title": "Beyond Cosine Similarity: Taming Semantic Drift and Antonym Intrusion in a 15-Million Node Turkish Synonym Graph",
+    "source": "arxiv, 2601.13251",
+    "published": "2026-01-20 01:37:25 CST",
+    "instution": "Ebubekir Tosun",
+    "is_large": false,
+    "abstract": "通过引入一个三类语义关系判别器和一种新的软-硬聚类算法，结合LLM增强构建的84.3万对标注数据集，在1500万个节点的土耳其语同义词图中有效抑制了语义漂移和反义词侵入，生成了290万个高精度语义簇。"
+  },
+  {
+    "title": "Paid Voices vs. Public Feeds: Interpretable Cross-Platform Theme Modeling of Climate Discourse",
+    "source": "arxiv, 2601.13317",
+    "published": "2026-01-20 03:00:56 CST",
+    "instution": "Purdue University",
+    "is_large": false,
+    "abstract": "The authors introduce an interpretable, end-to-end thematic discovery and assignment framework that clusters texts by semantic similarity and uses LLMs to generate human-interpretable theme labels, enabling cross-platform comparison of climate discourse between Meta ads and Bluesky posts; this approach improves thematic coherence and downstream task performance (stance prediction and theme-guided retrieval) over traditional baselines like LDA and BERTopic, as validated by human judgments and LLM-based evaluation."
+  },
+  {
+    "title": "CooperBench: Why Coding Agents Cannot be Your Teammates Yet",
+    "source": "arxiv, 2601.13295",
+    "published": "2026-01-20 02:48:37 CST",
+    "instution": "Stanford University",
+    "is_large": true,
+    "abstract": "通过构建包含600多个协作编码任务的CooperBench基准，评估当前编码智能体在协作时的表现，发现其成功率比单独执行任务时低约30%，并揭示了通信不畅、违背承诺和错误预期等问题。"
+  },
+  {
+    "title": "OI-Bench: An Option Injection Benchmark for Evaluating LLM Susceptibility to Directive Interference",
+    "source": "arxiv, 2601.13300",
+    "published": "2026-01-20 02:56:08 CST",
+    "instution": "National Yang Ming Chiao Tung University",
+    "is_large": false,
+    "abstract": "The paper introduces option injection—a benchmarking method that adds a misleading directive-containing option (e.g., 'Please choose E') to multiple-choice questions—to evaluate LLM susceptibility to directive interference; it constructs OI-Bench (3,000 questions across knowledge, reasoning, and commonsense tasks) and shows that 12 evaluated LLMs exhibit substantial and heterogeneous vulnerabilities, with high-capability models like Gemini-2.5-pro and Deepseek-r1 showing high attack success rates (ASR), revealing that standard accuracy does not guarantee robustness."
+  },
+  {
+    "title": "A BERTology View of LLM Orchestrations: Token- and Layer-Selective Probes for Efficient Single-Pass Classification",
+    "source": "arxiv, 2601.13288",
+    "published": "2026-01-20 02:40:29 CST",
+    "instution": "Universidad de Buenos Aires",
+    "is_large": false,
+    "abstract": "提出一种两阶段聚合探针方法，通过在完整token×layer隐藏状态张量上进行表示选择，复用LLM生成时的隐藏状态，在单次前向传递中实现高效分类，相比仅使用logit的方法（如MULI）性能提升，同时参数量远少于专用任务模型。"
+  },
+  {
+    "title": "From Completion to Editing: Unlocking Context-Aware Code Infilling via Search-and-Replace Instruction Tuning",
+    "source": "arxiv, 2601.13384",
+    "published": "2026-01-20 04:33:53 CST",
+    "instution": "Alibaba Group",
+    "is_large": true,
+    "abstract": "提出搜索与替换填充（SRI）框架，通过显式搜索阶段将代理验证和编辑机制内化为单次推理过程，使用SRI-200K数据集微调Qwen2.5-Coder系列模型，在仅2万样本下使对话模型超越基础模型的补全性能，同时保持与标准FIM相当的推理延迟。"
+  },
+  {
+    "title": "A Lightweight Modular Framework for Constructing Autonomous Agents Driven by Large Language Models: Design, Implementation, and Applications in AgentForge",
+    "source": "arxiv, 2601.13383",
+    "published": "2026-01-20 04:33:26 CST",
+    "instution": "University of Tartu",
+    "is_large": false,
+    "abstract": "提出一种基于模块化技能抽象和声明式配置的轻量级框架AgentForge，通过统一LLM后端接口和DAG任务编排，在Web抓取和数据分析任务中分别实现87.3%和91.2%的任务完成率，相比LangChain减少62%开发时间。"
+  },
+  {
+    "title": "PhysicsSolutionAgent: Towards Multimodal Explanations for Numerical Physics Problem Solving",
+    "source": "arxiv, 2601.13453",
+    "published": "2026-01-20 07:11:02 CST",
+    "instution": "BITS Pilani",
+    "is_large": false,
+    "abstract": "提出PhysicsSolutionAgent，利用Manim动画和视觉反馈循环生成物理问题解释视频，结合RAG和多轮纠错机制，在32个测试中用GPT-5-mini实现了100%视频完成率和平均3.8/5的自动化评分。"
+  },
+  {
+    "title": "Explicit Cognitive Allocation: A Principle for Governed and Auditable Inference in Large Language Models",
+    "source": "arxiv, 2601.13443",
+    "published": "2026-01-20 07:00:14 CST",
+    "instution": "Escuela Superior de Computedo del I.P.N",
+    "is_large": false,
+    "abstract": "提出显式认知分配原则，通过分离和协调认知功能，在农业领域提示中使认知收敛更早且结构可控，语义扩展下的认知对齐显著提高，并系统揭示探究的工具格局。"
+  },
+  {
+    "title": "Structured Insight from Unstructured Data: Large Language Models for SDOH-Driven Diabetes Risk Prediction",
+    "source": "arxiv, 2601.13388",
+    "published": "2026-01-20 04:53:09 CST",
+    "instution": "Stanford University",
+    "is_large": true,
+    "abstract": "使用大语言模型从非结构化患者叙述中提取结构化社会健康决定因素（SDOH）信息，并结合传统生物标志物输入机器学习模型，提升了糖尿病控制风险预测的准确性；同时LLM直接从文本预测糖尿病控制水平达到60%准确率。"
+  },
+  {
+    "title": "Towards Efficient and Robust Linguistic Emotion Diagnosis for Mental Health via Multi-Agent Instruction Refinement",
+    "source": "arxiv, 2601.13481",
+    "published": "2026-01-20 08:31:19 CST",
+    "instution": "Haiping Zhu*",
+    "is_large": false,
+    "abstract": "提出APOLO框架，通过多智能体协作的自动提示优化方法，在部分可观测马尔可夫决策过程指导下系统探索提示空间，提升了精神健康领域语言情绪诊断的准确性和鲁棒性。"
+  },
+  {
+    "title": "A Unified Variational Imputation Framework for Electric Vehicle Charging Data Using Retrieval-Augmented Language Model",
+    "source": "arxiv, 2601.13476",
+    "published": "2026-01-20 08:17:54 CST",
+    "instution": "Monash University",
+    "is_large": false,
+    "abstract": "提出一种基于检索增强语言模型的变分填补框架PRAIM，通过融合多模态数据并利用全网充电数据作为外部知识库，在四个公开数据集上显著提升了填补精度和下游预测性能。"
+  },
+  {
+    "title": "CatMaster: An Agentic Autonomous System for Computational Heterogeneous Catalysis Research",
+    "source": "arxiv, 2601.13508",
+    "published": "2026-01-20 09:51:12 CST",
+    "instution": "Tsinghua University",
+    "is_large": false,
+    "abstract": "提出了一种基于大语言模型（LLM）的智能代理系统CatMaster，通过自然语言驱动将请求转化为完整的计算工作区，在多保真度工具库支持下实现了从结构构建到高通量筛选的自动化，减少了人工脚本和记录开销，并在四个 increasingly complex 的催化任务中验证了其有效性，提升了异质催化计算研究的工作流效率与可重复性。"
+  },
+  {
+    "title": "Reasoning While Recommending: Entropy-Guided Latent Reasoning in Generative Re-ranking Models",
+    "source": "arxiv, 2601.13533",
+    "published": "2026-01-20 10:32:39 CST",
+    "instution": "China",
+    "is_large": false,
+    "abstract": "该论文提出熵引导的潜在推理（EGLR）模型，通过在生成重排序过程中实时进行上下文感知的可变长度推理并动态调整温度系数，有效缓解了中段高熵难题，使生成重排序模型在两个真实数据集上的性能得到显著提升。"
+  },
+  {
+    "title": "AgenticRed: Optimizing Agentic Systems for Automated Red-teaming",
+    "source": "arxiv, 2601.13518",
+    "published": "2026-01-20 10:10:22 CST",
+    "instution": "University of Washington",
+    "is_large": false,
+    "abstract": "提出AGENTICRED，一种结合大语言模型上下文学习与进化算法的自动化红-teaming系统设计方法，通过迭代优化代理系统结构，在Llama系列模型上实现96%-98%的攻击成功率，并在GPT-3.5-Turbo等专有模型上达到100%攻击成功率，显著提升现有技术水平。"
+  },
+  {
+    "title": "Behavior Knowledge Merge in Reinforced Agentic Models",
+    "source": "arxiv, 2601.13572",
+    "published": "2026-01-20 11:56:53 CST",
+    "instution": "Georgia Institute of Technology",
+    "is_large": false,
+    "abstract": "The paper proposes Reinforced Agent Merging (RAM), a distribution-aware model merging method that disentangles and selectively preserves/rescales sparse, task-specific parameter updates from RL-trained agentic models, thereby preventing signal dilution and achieving superior performance—surpassing both merging baselines and even individual specialized agents on 9 out of 12 tasks."
+  },
+  {
+    "title": "ChatAD: Reasoning-Enhanced Time-Series Anomaly Detection with Multi-Turn Instruction Evolution",
+    "source": "arxiv, 2601.13546",
+    "published": "2026-01-20 11:12:37 CST",
+    "instution": "Microsoft Research",
+    "is_large": true,
+    "abstract": "提出基于多智能体的TSEvol算法和TKTO优化方法，构建TSEData-20K数据集并训练ChatAD系列模型，使得时间序列异常检测的准确率提升34.50%，F1提升34.71%，误报率减少37.42%。"
+  },
+  {
+    "title": "Neural Organ Transplantation (NOT): Checkpoint-Based Modular Adaptation for Transformer Models",
+    "source": "arxiv, 2601.13580",
+    "published": "2026-01-20 12:10:57 CST",
+    "instution": "Jadara University",
+    "is_large": false,
+    "abstract": "提出基于检查点的模块化适应框架NOT，通过提取并独立训练预训练模型中的连续层子集作为可移植‘器官’，在无需原始训练数据的情况下将其插入兼容的解码器-only模型，实现了比LoRA高一个数量级的困惑度改进。"
+  },
+  {
+    "title": "AgentGC: Evolutionary Learning-based Lossless Compression for Genomics Data with LLM-driven Multiple Agent",
+    "source": "arxiv, 2601.13559",
+    "published": "2026-01-20 11:29:45 CST",
+    "instution": "Nankai University",
+    "is_large": false,
+    "abstract": "提出基于LLM驱动的多智能体进化学习方法AgentGC，通过用户层、认知层和压缩层的协同建模，实现基因组数据无损压缩，在9个数据集上相比14个基线平均压缩比提升16.33%，吞吐量提升9.15倍。"
+  },
+  {
+    "title": "SCRIPTMIND: Crime Script Inference and Cognitive Evaluation for LLM-based Social Engineering Scam Detection System",
+    "source": "arxiv, 2601.13581",
+    "published": "2026-01-20 12:11:00 CST",
+    "instution": "Korea University",
+    "is_large": false,
+    "abstract": "使用基于犯罪脚本推理和认知模拟评估的SCRIPTMIND框架，通过微调11B小型LLM，在检测准确率、假阳性减少、骗子话语预测和解释质量上超越GPT-4o 13%，并显著提升用户对电话诈骗的怀疑水平。"
+  },
+  {
+    "title": "Motion-to-Response Content Generation via Multi-Agent AI System with Real-Time Safety Verification",
+    "source": "arxiv, 2601.13589",
+    "published": "2026-01-20 12:42:03 CST",
+    "instution": "韩国大学",
+    "is_large": false,
+    "abstract": "通过一个包含情绪识别、响应策略决策、内容参数生成和安全验证的多智能体AI系统，将语音情感信号转化为安全且适龄的响应内容，在实现73.2%情绪识别准确率的同时确保100%的安全合规性。"
+  },
+  {
+    "title": "Vulnerability of LLMs' Belief Systems? LLMs Belief Resistance Check Through Strategic Persuasive Conversation Interventions",
+    "source": "arxiv, 2601.13590",
+    "published": "2026-01-20 12:43:55 CST",
+    "instution": "Indiana University Bloomington",
+    "is_large": false,
+    "abstract": "使用SMCR沟通框架下的多种说服策略，在五个主流大语言模型和三个领域中分析信念稳定性，并通过元认知提示和对抗性微调进行干预，发现较小模型表现出超过80%的信念改变，而GPT-4o-mini经微调后达到98.6%的鲁棒性，Llama模型即使微调仍易受攻击（<14%）。"
+  },
+  {
+    "title": "Activation-Space Anchored Access Control for Multi-Class Permission Reasoning in Large Language Models",
+    "source": "arxiv, 2601.13630",
+    "published": "2026-01-20 13:57:44 CST",
+    "instution": "中国科学技术大学",
+    "is_large": false,
+    "abstract": "通过发现中间激活空间中不同权限范围表示的可分离性，提出一种无需训练的多类权限控制框架AAAC，利用多锚点引导机制在推理时将查询激活重定向到授权区域，减少了86.5%的权限违规率和90.7%的基于提示攻击成功率。"
+  },
+  {
+    "title": "DSAEval: Evaluating Data Science Agents on a Wide Range of Real-World Data Science Problems",
+    "source": "arxiv, 2601.13591",
+    "published": "2026-01-20 12:44:36 CST",
+    "instution": "香港理工大学",
+    "is_large": false,
+    "abstract": "提出DSAEval基准，通过多模态环境感知、多查询交互和多维度评估方法，在641个真实数据科学问题上评测11种LLM，使得数据科学代理在结构化数据和常规分析流程中的表现得到提升，但在非结构化领域仍有挑战。"
+  },
+  {
+    "title": "TREX: Tokenizer Regression for Optimal Data Mixture",
+    "source": "arxiv, 2601.13588",
+    "published": "2026-01-20 12:41:09 CST",
+    "instution": "KAIST",
+    "is_large": false,
+    "abstract": "提出基于回归的框架TREX，通过小规模代理分词器在随机混合数据上训练并收集压缩统计信息，预测最优数据混合比例，使分词器在多语言场景下的压缩效率相比LLaMA3和均匀分布提升最多12%。"
+  },
+  {
+    "title": "TimeART: Towards Agentic Time Series Reasoning via Tool-Augmentation",
+    "source": "arxiv, 2601.13653",
+    "published": "2026-01-20 14:39:10 CST",
+    "instution": "Aarhus University",
+    "is_large": false,
+    "abstract": "提出TimeART框架和TimeToolBench数据集，通过融合100k专家轨迹和四阶段训练策略，使8B的时序推理模型在多个任务上实现SOTA性能。"
+  },
+  {
+    "title": "Why Does the LLM Stop Computing: An Empirical Study of User-Reported Failures in Open-Source LLMs",
+    "source": "arxiv, 2601.13655",
+    "published": "2026-01-20 14:42:56 CST",
+    "instution": "The Chinese University of HongKong",
+    "is_large": false,
+    "abstract": "通过分析705个开源大模型中的真实故障，揭示了部署栈的系统性脆弱性，使得运行时崩溃占61.1%，环境错误占45.7%，并提出了诊断启发式方法以提升LLM部署可靠性。"
+  },
+  {
+    "title": "Communication-Free Collective Navigation for a Swarm of UAVs via LiDAR-Based Deep Reinforcement Learning",
+    "source": "arxiv, 2601.13657",
+    "published": "2026-01-20 14:46:09 CST",
+    "instution": "Ulsan National Institute of Science and Technology",
+    "is_large": false,
+    "abstract": "使用基于LiDAR的深度强化学习方法，使无人机群在无通信环境下实现集体导航，通过局部感知隐式跟随领导者，在复杂障碍环境中实现了鲁棒的端到端导航。"
+  },
+  {
+    "title": "Sample Complexity of Average-Reward Q-Learning: From Single-agent to Federated Reinforcement Learning",
+    "source": "arxiv, 2601.13642",
+    "published": "2026-01-20 14:21:54 CST",
+    "instution": "CMU",
+    "is_large": true,
+    "abstract": "提出了一种适用于单智能体和联邦设置的平均奖励Q学习算法，通过精心选择参数，在单智能体情况下将样本复杂度提升至少\\frac{\\|h^{\\star}\\|_{\\mathfrak{sp}}^{2}}{\\varepsilon^{2}}倍，并在联邦设置中将每个智能体的样本复杂度降低到\\widetilde{O}\\left(\\frac{|\\mathcal{S}||\\mathcal{A}||h^{\\star}||_{\\mathfrak{sp}}^{3}}{M\\varepsilon^{3}}\\right)，且仅需\\widetilde{O}\\left(\\frac{\\|h^{\\star}\\|_{\\mathfrak{sp}}}{\\varepsilon}\\right)通信轮次。"
+  },
+  {
+    "title": "The Orchestration of Multi-Agent Systems: Architectures, Protocols, and Enterprise Adoption",
+    "source": "arxiv, 2601.13671",
+    "published": "2026-01-20 15:13:53 CST",
+    "instution": "Skan AI",
+    "is_large": false,
+    "abstract": "提出了一种统一的多-agent 系统架构和两种通信协议（Model Context Protocol 与 Agent-to-Agent 协议），通过结构化协调与通信，实现可扩展、可审计、合规的分布式 agent 协作，提升了企业级 AI 生态系统的协同效率与透明度。"
+  },
+  {
+    "title": "Uncertainty-Aware Gradient Signal-to-Noise Data Selection for Instruction Tuning",
+    "source": "arxiv, 2601.13697",
+    "published": "2026-01-20 15:51:32 CST",
+    "instution": "Alibaba Cloud Computing",
+    "is_large": false,
+    "abstract": "提出GRADFILTERING方法，利用小GPT-2代理模型和LoRA集成捕捉梯度信噪比（G-SNR），实现不确定性感知的数据选择，在多数LLM-as-a-judge评估中匹配或超越随机子集和强基线，并在相同计算预算下更快收敛。"
+  },
+  {
+    "title": "Attention-space Contrastive Guidance for Efficient Hallucination Mitigation in LVLMs",
+    "source": "arxiv, 2601.13707",
+    "published": "2026-01-20 16:04:18 CST",
+    "instution": "Seoul National University",
+    "is_large": false,
+    "abstract": "提出Attention-space Contrastive Guidance（ACG）方法，通过在自注意力层内构建视觉-语言和纯语言注意力路径并进行对比引导，减少对语言先验的依赖，在CHAIR和POPE基准上实现了最先进的忠实性和描述质量，同时相比多步推理方法延迟降低达2倍。"
+  },
+  {
+    "title": "HeteroCache: A Dynamic Retrieval Approach to Heterogeneous KV Cache Compression for Long-Context LLM Inference",
+    "source": "arxiv, 2601.13684",
+    "published": "2026-01-20 15:35:06 CST",
+    "instution": "Zhejiang University",
+    "is_large": false,
+    "abstract": "提出一种名为HeteroCache的无训练动态压缩框架，通过细粒度的头部分配和异步按需检索机制，在224K上下文下相比原始模型实现了最高3倍的解码加速，同时在多个长上下文基准上达到最优性能。"
+  },
+  {
+    "title": "OP-Bench: Benchmarking Over-Personalization for Memory-Augmented Personalized Conversational Agents",
+    "source": "arxiv, 2601.13722",
+    "published": "2026-01-20 16:27:13 CST",
+    "instution": "Harbin Institute of Technology",
+    "is_large": false,
+    "abstract": "提出Self-ReCheck轻量级记忆过滤机制，减少记忆增强对话系统中的过度个性化问题，在保持个性化效果的同时将过度个性化降低了29%。"
+  },
+  {
+    "title": "Simulated Ignorance Fails: A Systematic Study of LLM Behaviors on Forecasting Problems Before Model Knowledge Cutoff",
+    "source": "arxiv, 2601.13717",
+    "published": "2026-01-20 16:21:55 CST",
+    "instution": "University of Chicago",
+    "is_large": false,
+    "abstract": "通过系统测试9个模型在477个问题上的表现，发现提示模型抑制先验知识的模拟无知（SI）方法无法逼近真实无知（TI），SI与TI之间存在52%的性能差距，链式思维推理也无法有效抑制知识泄露。"
+  },
+  {
+    "title": "Hidden in Plain Text: Measuring LLM Deception Quality Against Human Baselines Using Social Deduction Games",
+    "source": "arxiv, 2601.13709",
+    "published": "2026-01-20 16:07:21 CST",
+    "instution": "77SPARX Studio, Inc.",
+    "is_large": false,
+    "abstract": "使用GPT-4o LLM代理在异步多人社交推理游戏《黑手党》中模拟对话，通过训练GPT-4-Turbo作为黑手党探测器分析对话记录，发现LLM代理的黑手党角色预测准确率低于人类游戏，表明LLM在自然语言欺骗中比人类更难被察觉。"
+  },
+  {
+    "title": "Towards robust long-context understanding of large language model via active recap learning",
+    "source": "arxiv, 2601.13734",
+    "published": "2026-01-20 16:42:04 CST",
+    "instution": "西安交通大学",
+    "is_large": false,
+    "abstract": "提出主动回顾学习（ARL）框架，通过在持续预训练中构建目标序列和推理时进行回溯总结，使大语言模型在RULER上提升26.8%，在LongBench上提升9.44%。"
+  },
+  {
+    "title": "DroneVLA: VLA based Aerial Manipulation",
+    "source": "arxiv, 2601.13809",
+    "published": "2026-01-20 18:08:00 CST",
+    "instution": "Skoltech",
+    "is_large": false,
+    "abstract": "通过结合基于MediaPipe的Grounding DINO与视觉-语言-动作（VLA）模型，并利用动态A*规划算法和人体姿态估计，实现无人机根据自然语言指令自主抓取并递送物体，在真实场景中验证了该系统在定位、导航和人机交互递物中的可行性。"
+  },
+  {
+    "title": "DARC: Decoupled Asymmetric Reasoning Curriculum for LLM Evolution",
+    "source": "arxiv, 2601.13761",
+    "published": "2026-01-20 17:12:27 CST",
+    "instution": "中国人民大学高瓴人工智能学院",
+    "is_large": false,
+    "abstract": "提出DARC框架，通过解耦的非对称推理课程，用显式难度级别和外部语料训练提问者，并用文档增强的教师模型生成伪标签来监督学生解题者，平均在九个推理基准上提升了10.9分。"
+  },
+  {
+    "title": "ELSA: Efficient LLM-Centric Split Aggregation for Privacy-Aware Hierarchical Federated Learning over Resource-Constrained Edge Networks",
+    "source": "arxiv, 2601.13824",
+    "published": "2026-01-20 18:33:19 CST",
+    "instution": "未知",
+    "is_large": false,
+    "abstract": "提出ELSA框架，通过结合分割学习与分层联邦学习，采用语义指纹聚类、轻量通信机制和语义子空间正交扰动，在资源受限的边缘网络中实现高效的LLM微调，提升了适应性、收敛性和鲁棒性，同时减少了通信开销并缓解了隐私泄露。"
+  },
+  {
+    "title": "HardSecBench: Benchmarking the Security Awareness of LLMs for Hardware Code Generation",
+    "source": "arxiv, 2601.13864",
+    "published": "2026-01-20 19:27:40 CST",
+    "instution": "University of Science and Technology of China",
+    "is_large": false,
+    "abstract": "提出多智能体流水线构建HardSecBench基准，包含924个任务覆盖76个硬件相关CWE条目，通过执行证据自动化评估，发现大模型在满足功能需求的同时仍普遍存在安全风险，提示工程可使安全性能显著提升。"
+  },
+  {
+    "title": "Chain-of-Thought Compression Should Not Be Blind: V-Skip for Efficient Multimodal Reasoning via Dual-Path Anchoring",
+    "source": "arxiv, 2601.13879",
+    "published": "2026-01-20 19:45:38 CST",
+    "instution": "西安交通大学软件学院",
+    "is_large": false,
+    "abstract": "提出V-Skip方法，通过双路径锚定机制在语言惊奇度和跨模态注意力流中权衡标记重要性，实现视觉锚点的保留，在Qwen2-VL和Llama-3.2上实现2.9倍加速且精度损失可忽略，并在DocVQA上超越基线30%以上。"
+  },
+  {
+    "title": "Knowledge Graph-Assisted LLM Post-Training for Enhanced Legal Reasoning",
+    "source": "arxiv, 2601.13806",
+    "published": "2026-01-20 18:06:34 CST",
+    "instution": "Thomson Reuters Foundational Research",
+    "is_large": false,
+    "abstract": "通过构建基于IRAC框架的包含12K个法律案例的知识图谱，并利用该图谱生成训练数据进行监督微调（SFT）和直接偏好优化（DPO），在三个主流大模型上提升了法律推理能力，在4/5个法律基准测试中优于基线模型，70B的DPO模型在6个推理任务中的4个达到最佳表现。"
+  },
+  {
+    "title": "Pedagogical Alignment for Vision-Language-Action Models: A Comprehensive Framework for Data, Architecture, and Evaluation in Education",
+    "source": "arxiv, 2601.13876",
+    "published": "2026-01-20 19:43:15 CST",
+    "instution": "Chosun University",
+    "is_large": false,
+    "abstract": "提出Pedagogical VLA Framework，通过文本修复、大模型知识蒸馏、安全训练和教学评估调整，使得轻量级视觉-语言-动作模型在科学教育场景中能生成符合教学目标的解释，同时保持与基线模型相当的任务性能。"
+  },
+  {
+    "title": "LifeAgentBench: A Multi-dimensional Benchmark and Agent for Personal Health Assistants in Digital Health",
+    "source": "arxiv, 2601.13880",
+    "published": "2026-01-20 19:51:58 CST",
+    "instution": "University of California San Diego",
+    "is_large": false,
+    "abstract": "提出LifeAgentBench基准和LifeAgent代理，通过多步证据检索与确定性聚合方法，在长视野、跨维度健康推理任务中显著优于现有基线。"
+  },
+  {
+    "title": "OpenLearnLM Benchmark: A Unified Framework for Evaluating Knowledge, Skill, and Attitude in Educational Large Language Models",
+    "source": "arxiv, 2601.13882",
+    "published": "2026-01-20 19:53:31 CST",
+    "instution": "Korea University",
+    "is_large": false,
+    "abstract": "提出OpenLearnLM Benchmark理论驱动的三维度（知识、技能、态度）评估框架，通过124K+题目结合Bloom分类法与Alignment Faking方法，全面评估教育大模型能力，揭示各前沿模型在不同维度上的显著差异，验证了多轴评估的必要性。"
+  },
+  {
+    "title": "HyperWalker: Dynamic Hypergraph-Based Deep Diagnosis for Multi-Hop Clinical Modeling across EHR and X-Ray in Medical VLMs",
+    "source": "arxiv, 2601.13919",
+    "published": "2026-01-20 20:48:09 CST",
+    "instution": "上海交通大学",
+    "is_large": false,
+    "abstract": "提出HyperWalker，通过动态超图和测试时训练方法，整合EHR和X光数据进行多跳临床推理，在MIMIC和EHRXQA上实现了最先进的医疗报告生成和视觉问答性能。"
+  },
+  {
+    "title": "Automatic Prompt Optimization for Dataset-Level Feature Discovery",
+    "source": "arxiv, 2601.13922",
+    "published": "2026-01-20 20:51:03 CST",
+    "instution": "SUPSI, Dalle Molle Institute for Artificial Intelligence Studies (IDSIA)",
+    "is_large": false,
+    "abstract": "提出一种多智能体提示优化框架，通过在数据集级别上联合优化指令提示和示例选择，实现可解释且判别性强的特征发现，提升了下游分类任务性能。"
+  },
+  {
+    "title": "Autonomous Knowledge Graph Exploration with Adaptive Breadth-Depth Retrieval",
+    "source": "arxiv, 2601.13969",
+    "published": "2026-01-20 21:46:37 CST",
+    "instution": "Harvard Medical School",
+    "is_large": true,
+    "abstract": "ARK introduces an agentic knowledge graph retriever using adaptive alternation between global lexical search and one-hop neighborhood exploration, improving average Hit@1 by up to 31.4% and average MRR by up to 28.0% over retrieval-based and agentic training-free methods."
+  },
+  {
+    "title": "Stream-Voice-Anon: Enhancing Utility of Real-Time Speaker Anonymization via Neural Audio Codec and Language Models",
+    "source": "arxiv, 2601.13948",
+    "published": "2026-01-20 21:23:44 CST",
+    "instution": "南洋理工大学",
+    "is_large": false,
+    "abstract": "提出Stream-Voice-Anon，利用神经音频编解码器和因果语言模型，结合伪说话人表示采样与动态延迟技术，在保持低延迟的同时实现流式说话人匿名化，相比DarkStream方法相对降低46%的WER并提升28%的情绪保留率。"
+  },
+  {
+    "title": "RL-BioAug: Label-Efficient Reinforcement Learning for Self-Supervised EEG Representation Learning",
+    "source": "arxiv, 2601.13964",
+    "published": "2026-01-20 21:38:01 CST",
+    "instution": "韩国科学技术院",
+    "is_large": false,
+    "abstract": "使用基于强化学习的自适应数据增强方法RL-BioAug，在仅利用10%标签数据的情况下，通过动态选择最优增强策略，使Sleep-EDFX和CHB-MIT数据集上的Macro-F1分数分别提升了9.69%和8.80%。"
+  },
+  {
+    "title": "From Tags to Trees: Structuring Fine-Grained Knowledge for Controllable Data Selection in LLM Instruction Tuning",
+    "source": "arxiv, 2601.13995",
+    "published": "2026-01-20 22:06:51 CST",
+    "instution": "Kuaishou Technology",
+    "is_large": false,
+    "abstract": "提出基于细粒度标签构建知识树的方法TAGS，通过树感知的信息传播和KL散度对齐采样，在仅用5%数据时相比全数据模型提升5.84%，并进一步在目标领域平均提升4.24%。"
+  },
+  {
+    "title": "RM-Distiller: Exploiting Generative LLM for Reward Model Distillation",
+    "source": "arxiv, 2601.14032",
+    "published": "2026-01-20 22:53:32 CST",
+    "instution": "哈尔滨工业大学",
+    "is_large": false,
+    "abstract": "提出RM-Distiller框架，通过利用生成式大模型的精细化、评分和生成能力，提升奖励模型蒸馏效果，在RM基准和强化学习对齐任务中显著优于传统方法。"
+  },
+  {
+    "title": "Kakugo: Distillation of Low-Resource Languages into Small Language Models",
+    "source": "arxiv, 2601.14051",
+    "published": "2026-01-20 23:05:44 CST",
+    "instution": "爱丁堡大学",
+    "is_large": false,
+    "abstract": "使用大模型蒸馏方法生成合成数据和翻译指令数据集，训练出54种低资源语言的小型语言模型，在翻译、分类和问答任务上相比基座模型有持续提升，每种语言的生成和训练成本低于50美元。"
+  },
+  {
+    "title": "Numina-Lean-Agent: An Open and General Agentic Reasoning System for Formal Mathematics",
+    "source": "arxiv, 2601.14027",
+    "published": "2026-01-20 22:51:45 CST",
+    "instution": "Project Numina",
+    "is_large": false,
+    "abstract": "提出使用通用编码代理作为形式数学推理器的新范式，结合Claude Code与Numina-Lean-MCP实现对Lean的自主交互、定理检索和辅助推理，在Putnam 2025上以12/12求解率达到最优性能，并成功用于与数学家协作形式化Brascamp-Lieb定理。"
+  },
+  {
+    "title": "Zero-shot adaptable task planning for autonomous construction robots: a comparative study of lightweight single and multi-AI agent systems",
+    "source": "arxiv, 2601.14091",
+    "published": "2026-01-20 23:54:33 CST",
+    "instution": "Virginia Tech",
+    "is_large": false,
+    "abstract": "使用轻量级开源大语言模型和视觉语言模型构建单智能体与多智能体系统，使得建筑机器人在零样本任务规划中具有更好的适应性和通用性，四智能体团队在多数指标上优于GPT-4o且成本降低十倍。"
+  },
+  {
+    "title": "LLMOrbit: A Circular Taxonomy of Large Language Models -From Scaling Walls to Agentic AI Systems",
+    "source": "arxiv, 2601.14053",
+    "published": "2026-01-20 23:06:19 CST",
+    "instution": "Microsoft",
+    "is_large": true,
+    "abstract": "通过提出LLMOrbit这一环形分类法，系统梳理2019-2025年大语言模型的发展脉络，揭示突破“扩展墙”的六种范式，包括测试时计算、量化、分布式边缘计算等，在推理效率上实现最高100倍成本降低，并指出后训练技术（如纯强化学习）可使小模型（如Phi-4）达到甚至超越更大模型的性能。"
+  },
+  {
+    "title": "POCI-Diff: Position Objects Consistently and Interactively with 3D-Layout Guided Diffusion",
+    "source": "arxiv, 2601.14056",
+    "published": "2026-01-20 23:13:43 CST",
+    "instution": "MIT-IBM Watson AI Lab",
+    "is_large": true,
+    "abstract": "提出一种基于扩散模型的方法，通过3D布局引导的联合几何约束与实例级语义绑定，实现一致且交互式的文本到图像生成，在多对象场景合成中提升了布局准确性和视觉保真度，同时消除了形变导致的几何伪影。"
+  }
+]
