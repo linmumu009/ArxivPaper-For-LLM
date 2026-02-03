@@ -1,4 +1,5 @@
-[English](README.md) | 中文
+English | [简体](README.zh-CN.md)
+
 
 # ArxivPaper
 
