@@ -3,14 +3,24 @@ import json
 import os
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from config.config import DATA_ROOT  # noqa: E402
 
 
 def find_latest_json(root: Path) -> Tuple[Path, str]:
+    if not root.exists():
+        raise SystemExit(f"input root not found: {root}")
+    result = find_latest_json_optional(root)
+    if result is None:
+        raise SystemExit(f"no dated json found in {root}")
+    return result
+
+
+def find_latest_json_optional(root: Path) -> Optional[Tuple[Path, str]]:
     if not root.exists():
         raise SystemExit(f"input root not found: {root}")
     cand: List[Tuple[Path, str]] = []
@@ -24,7 +34,7 @@ def find_latest_json(root: Path) -> Tuple[Path, str]:
             continue
         cand.append((p, m.group(1)))
     if not cand:
-        raise SystemExit(f"no dated json found in {root}")
+        return None
     cand.sort(key=lambda x: x[1], reverse=True)
     return cand[0]
 
@@ -50,7 +60,18 @@ def run(args: argparse.Namespace) -> None:
             raise SystemExit(f"input file not found: {in_path}")
         date_str = in_path.stem
     else:
-        in_path, date_str = find_latest_json(root)
+        result = find_latest_json_optional(root)
+        if result is None:
+            date_str = datetime.now().date().isoformat()
+            out_root = Path(args.output_root)
+            out_dir = out_root / date_str
+            out_dir.mkdir(parents=True, exist_ok=True)
+            out_path = out_dir / f"{date_str}.json"
+            out_path.write_text("[]", encoding="utf-8")
+            print(f"[FILTER] no dated json in {root}, wrote empty result for {date_str}", flush=True)
+            print("============结束筛选大机构论文==============", flush=True)
+            return
+        in_path, date_str = result
     print("============开始筛选大机构论文==============", flush=True)
     items = load_items(in_path)
     kept = [it for it in items if bool(it.get("is_large"))]

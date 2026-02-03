@@ -3,20 +3,22 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 
 
 ROOT = Path(os.path.dirname(os.path.dirname(__file__)))
 sys.path.insert(0, str(ROOT))
-from config.config import DATA_ROOT  # noqa: E402
+from config.config import DATA_ROOT, ARXIV_JSON_DIR, PAPER_DEDUP_DIR, JSON_FILENAME_FMT  # noqa: E402
 
 CONFIG_PATH = ROOT / "config" / "paperList.json"
 DATA_DIR = ROOT / DATA_ROOT
-ARXIV_LIST_DIR = DATA_DIR / "arxivList"
-DEDUP_DIR = DATA_DIR / "paperList_remove_duplications"
+ARXIV_LIST_DIR = DATA_DIR / "arxivList" / "md"
+ARXIV_JSON_ROOT = ROOT / ARXIV_JSON_DIR
+DEDUP_DIR = ROOT / PAPER_DEDUP_DIR
 
 
 def load_existing() -> List[Dict[str, Any]]:
@@ -56,6 +58,38 @@ def find_latest_md(explicit: str | None = None) -> Path:
     if not cands:
         raise SystemExit(f"no markdown in {ARXIV_LIST_DIR}")
     return cands[-1]
+
+
+def find_latest_json(explicit: str | None = None) -> Path:
+    if explicit:
+        p = Path(explicit)
+        if not p.exists():
+            raise SystemExit(f"arxiv json not found: {p}")
+        return p
+    if not ARXIV_JSON_ROOT.exists():
+        raise SystemExit(f"arxiv json dir not found: {ARXIV_JSON_ROOT}")
+    cands = sorted([p for p in ARXIV_JSON_ROOT.glob("*.json") if p.is_file()])
+    if not cands:
+        raise SystemExit(f"no json in {ARXIV_JSON_ROOT}")
+    return cands[-1]
+
+
+def load_json_papers(path: Path) -> Tuple[dict, List[Dict[str, Any]]]:
+    text = path.read_text(encoding="utf-8", errors="ignore").strip()
+    try:
+        obj = json.loads(text) if text else {}
+    except json.JSONDecodeError:
+        obj = {}
+    if isinstance(obj, dict):
+        papers = obj.get("papers") or []
+    elif isinstance(obj, list):
+        papers = obj
+        obj = {"papers": papers}
+    else:
+        papers = []
+        obj = {"papers": papers}
+    papers = [p for p in papers if isinstance(p, dict)]
+    return obj, papers
 
 
 def parse_md(md_path: Path) -> List[Dict[str, str]]:
@@ -111,6 +145,11 @@ def filter_new_items(today_items: List[Dict[str, str]], seen: set) -> List[Dict[
         new_items.append(item)
         seen.add(key)
     return new_items
+
+
+def extract_date_from_name(name: str) -> str:
+    m = re.search(r"\d{4}-\d{2}-\d{2}", name)
+    return m.group(0) if m else datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 
 def append_to_config(existing: List[Dict[str, Any]], new_items: List[Dict[str, str]]) -> None:
@@ -223,16 +262,48 @@ def write_dedup_md(md_path: Path, new_items: List[Dict[str, str]]) -> None:
 
 def run() -> None:
     ap = argparse.ArgumentParser("paperList_remove_duplications")
-    ap.add_argument("--md", help="arxiv list markdown path; default latest in data/arxivList")
+    ap.add_argument("--md", default="", help="arxiv list markdown path; default latest in data/arxivList/md")
+    ap.add_argument("--json", default="", help="arxiv list json path; default latest in data/arxivList/json")
+    ap.add_argument("--out-json", default="", help="output json path; default data/paperList_remove_duplications/<date>.json")
     args = ap.parse_args()
 
-    md_path = find_latest_md(args.md)
+    json_path = find_latest_json(args.json if args.json else None)
+    json_obj, papers = load_json_papers(json_path)
     existing = load_existing()
     seen = build_seen_keys(existing)
-    today_items = parse_md(md_path)
+
+    today_items = []
+    for p in papers:
+        title = str(p.get("title", "")).strip()
+        arxiv_id = str(p.get("arxiv_id", "")).strip()
+        if title or arxiv_id:
+            today_items.append({"title": title, "source": arxiv_id})
     new_items = filter_new_items(today_items, seen)
     append_to_config(existing, new_items)
-    write_dedup_md(md_path, new_items)
+
+    keep_keys = {(it["title"], it["source"]) for it in new_items}
+    kept_papers = []
+    for p in papers:
+        key = (str(p.get("title", "")).strip(), str(p.get("arxiv_id", "")).strip())
+        if key in keep_keys:
+            kept_papers.append(p)
+
+    out_obj = dict(json_obj) if isinstance(json_obj, dict) else {"papers": []}
+    out_obj["papers"] = kept_papers
+    out_obj["selected"] = len(kept_papers)
+    out_obj["generated_utc"] = datetime.now(timezone.utc).isoformat()
+
+    if args.out_json:
+        out_json_path = Path(args.out_json)
+    else:
+        date_str = extract_date_from_name(json_path.name)
+        out_json_path = DEDUP_DIR / datetime.strptime(date_str, "%Y-%m-%d").strftime(JSON_FILENAME_FMT)
+    out_json_path.parent.mkdir(parents=True, exist_ok=True)
+    out_json_path.write_text(json.dumps(out_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    if args.md:
+        md_path = find_latest_md(args.md)
+        write_dedup_md(md_path, new_items)
 
 
 if __name__ == "__main__":

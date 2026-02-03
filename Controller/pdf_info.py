@@ -18,7 +18,7 @@ from config.config import org_model as CFG_MODEL  # noqa: E402
 from config.config import org_temperature as CFG_TEMPERATURE  # noqa: E402
 from config.config import org_max_tokens as CFG_MAX_TOKENS  # noqa: E402
 from config.config import pdf_info_system_prompt as CFG_INFO_PROMPT  # noqa: E402
-from config.config import DATA_ROOT  # noqa: E402
+from config.config import DATA_ROOT, PAPER_THEME_FILTER_DIR  # noqa: E402
 from config.config import pdf_info_concurrency  # noqa: E402
 
 
@@ -59,35 +59,37 @@ def read_text_clip(path: Path, max_chars: int = 120000) -> str:
     return t
 
 
-def parse_arxiv_list(md_path: Path) -> Dict[str, Dict[str, str]]:
-    text = md_path.read_text(encoding="utf-8", errors="ignore")
-    lines = [ln.rstrip() for ln in text.splitlines()]
+def find_latest_json(root: Path) -> Path:
+    if not root.exists():
+        raise SystemExit(f"json dir not found: {root}")
+    files = sorted([p for p in root.glob("*.json") if p.is_file()])
+    if not files:
+        raise SystemExit(f"no json in {root}")
+    return files[-1]
+
+
+def parse_arxiv_json(json_path: Path) -> Dict[str, Dict[str, str]]:
+    text = json_path.read_text(encoding="utf-8", errors="ignore")
+    try:
+        obj = json.loads(text) if text.strip() else {}
+    except Exception:
+        obj = {}
+    papers = obj.get("papers") if isinstance(obj, dict) else None
+    papers = papers if isinstance(papers, list) else []
     meta: Dict[str, Dict[str, str]] = {}
-    i = 0
-    while i < len(lines):
-        ln = lines[i]
-        m_title = re.match(r"^\s*\d+\.\s+\*\*(.+?)\*\*", ln)
-        if not m_title:
-            i += 1
+    for p in papers:
+        if not isinstance(p, dict):
             continue
-        title = m_title.group(1).strip()
-        published = ""
-        arxiv_id = ""
-        if i + 1 < len(lines):
-            m_pub = re.search(r"Published:\s*`([^`]+)`", lines[i + 1])
-            if m_pub:
-                published = m_pub.group(1).strip()
-        if i + 2 < len(lines):
-            m_id = re.search(r"arXiv:\s*\[([0-9]+\.[0-9]+)\]", lines[i + 2])
-            if m_id:
-                arxiv_id = m_id.group(1).strip()
-        if arxiv_id:
-            meta[arxiv_id] = {
-                "title": title,
-                "published": published,
-                "source": f"arxiv, {arxiv_id}",
-            }
-        i += 1
+        arxiv_id = str(p.get("arxiv_id") or "").strip()
+        if not arxiv_id:
+            continue
+        title = str(p.get("title") or "").strip()
+        published = str(p.get("published_utc") or p.get("published") or "").strip()
+        meta[arxiv_id] = {
+            "title": title,
+            "published": published,
+            "source": f"arxiv, {arxiv_id}",
+        }
     return meta
 
 
@@ -136,17 +138,24 @@ def parse_json_or_fallback(text: str) -> Dict[str, Any]:
 
 
 def run(args: argparse.Namespace) -> None:
-    list_root = Path(args.arxiv_list_root)
-    _, date_dir = find_latest_date_dir(list_root)
-    list_file = list_root / f"{date_dir}.md"
-    if not list_file.exists():
-        raise SystemExit(f"missing arxiv list file: {list_file}")
-    meta_map = parse_arxiv_list(list_file)
-    preview_dir = Path(args.in_md_root) / date_dir
+    preview_root = Path(args.in_md_root)
+    preview_dir, date_dir = find_latest_date_dir(preview_root)
+    arxiv_json_path = Path(args.arxiv_json) if args.arxiv_json else None
+    if arxiv_json_path and not arxiv_json_path.exists():
+        raise SystemExit(f"missing arxiv json file: {arxiv_json_path}")
+    if not arxiv_json_path:
+        candidate = Path(PAPER_THEME_FILTER_DIR) / f"{date_dir}.json"
+        if candidate.exists():
+            arxiv_json_path = candidate
+        else:
+            arxiv_json_path = find_latest_json(Path(PAPER_THEME_FILTER_DIR))
+    meta_map = parse_arxiv_json(arxiv_json_path)
     out_root = ensure_dir(Path(args.outdir))
+    out_path = out_root / f"{date_dir}.json"
     md_files = list_md_files(preview_dir)
     if not md_files:
         print(f"no md files in {preview_dir}, skip pdf_info", flush=True)
+        out_path.write_text("[]", encoding="utf-8")
         print("[process] 0/0")
         return
     print("============开始调用大模型做机构识别==============", flush=True)
@@ -156,7 +165,6 @@ def run(args: argparse.Namespace) -> None:
     model = (CFG_MODEL or "qwen-plus").strip()
     temperature = CFG_TEMPERATURE if CFG_TEMPERATURE is not None else 1.0
     max_tokens = CFG_MAX_TOKENS if CFG_MAX_TOKENS is not None else 1024
-    out_path = out_root / f"{date_dir}.json"
     agg: List[Dict[str, Any]] = []
     if out_path.exists():
         try:
@@ -246,7 +254,7 @@ def main() -> None:
     ap = argparse.ArgumentParser("pdf_info")
     ap.add_argument("--in-md-root", default=str(Path(DATA_ROOT) / "preview_pdf_to_mineru"))
     ap.add_argument("--outdir", default=str(Path(DATA_ROOT) / "pdf_info"))
-    ap.add_argument("--arxiv-list-root", default=str(Path(DATA_ROOT) / "arxivList"))
+    ap.add_argument("--arxiv-json", default="")
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--concurrency", type=int, default=pdf_info_concurrency)
     ap.add_argument("--max-chars", type=int, default=120000)

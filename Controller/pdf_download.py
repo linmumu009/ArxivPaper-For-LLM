@@ -2,23 +2,25 @@
 # -*- coding: utf-8 -*-
 
 """
-Download arXiv PDFs from a Markdown file (e.g. papers.md) and validate integrity.
+Download arXiv PDFs from a JSON list and validate integrity.
 
 Typical usage:
-  python .\pdf_download.py --md .\papers.md --outdir .\pdfs
+  python .\pdf_download.py --json .\papers.json --outdir .\pdfs
 
 If you must use proxy from environment variables:
-  python .\pdf_download.py --md .\papers.md --outdir .\pdfs --use-proxy
+  python .\pdf_download.py --json .\papers.json --outdir .\pdfs --use-proxy
 """
 
 import argparse
+import json
 import logging
 import os
 import re
 import sys
 import time
+from pathlib import Path
 from dataclasses import dataclass
-from typing import List, Set, Optional, Tuple
+from typing import List, Set, Optional, Tuple, Dict, Any
 
 import requests
 
@@ -241,7 +243,16 @@ import requests
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from config.config import OUTPUT_DIR, LLM_SELECT_THEME_DIR, PAPER_THEME_FILTER_DIR, FILENAME_FMT, PDF_OUTPUT_DIR, USER_AGENT  # noqa: E402
+from config.config import (
+    OUTPUT_DIR,
+    ARXIV_JSON_DIR,
+    LLM_SELECT_THEME_DIR,
+    PAPER_THEME_FILTER_DIR,
+    JSON_FILENAME_FMT,
+    PDF_OUTPUT_DIR,
+    USER_AGENT,
+    MANIFEST_FILENAME,
+)  # noqa: E402
 from Controller.http_session import build_session
 
 
@@ -255,47 +266,74 @@ def setup_logging():
     return logger
 
 
-def detect_latest_md(root_dir: str):
+def detect_latest_json(root_dir: str):
     if not os.path.isdir(root_dir):
-        raise FileNotFoundError(f"md dir not found: {root_dir}")
-    files = [f for f in os.listdir(root_dir) if f.endswith(".md")]
+        raise FileNotFoundError(f"json dir not found: {root_dir}")
+    files = [f for f in os.listdir(root_dir) if f.endswith(".json")]
     if not files:
-        raise FileNotFoundError(f"No .md files found in {root_dir}")
+        raise FileNotFoundError(f"No .json files found in {root_dir}")
     full = [os.path.join(root_dir, f) for f in files]
     full.sort(key=lambda p: os.path.getmtime(p), reverse=True)
     return full[0]
 
 
-def resolve_md_path(args_md: Optional[str]) -> str:
-    if args_md:
-        return args_md
+def resolve_json_path(args_json: Optional[str]) -> str:
+    if args_json:
+        return args_json
 
-    today = datetime.now().strftime(FILENAME_FMT)
-    for base_dir in [PAPER_THEME_FILTER_DIR, LLM_SELECT_THEME_DIR, OUTPUT_DIR]:
+    today = datetime.now().strftime(JSON_FILENAME_FMT)
+    for base_dir in [PAPER_THEME_FILTER_DIR, LLM_SELECT_THEME_DIR, ARXIV_JSON_DIR]:
         candidate = os.path.join(base_dir, today)
         if os.path.isfile(candidate):
             return candidate
 
-    for base_dir in [PAPER_THEME_FILTER_DIR, LLM_SELECT_THEME_DIR, OUTPUT_DIR]:
+    for base_dir in [PAPER_THEME_FILTER_DIR, LLM_SELECT_THEME_DIR, ARXIV_JSON_DIR]:
         try:
-            return detect_latest_md(base_dir)
+            return detect_latest_json(base_dir)
         except FileNotFoundError:
             continue
 
     raise FileNotFoundError(
-        f"No markdown found in {PAPER_THEME_FILTER_DIR}, {LLM_SELECT_THEME_DIR} or {OUTPUT_DIR}"
+        f"No json found in {PAPER_THEME_FILTER_DIR}, {LLM_SELECT_THEME_DIR} or {ARXIV_JSON_DIR}"
     )
 
 
-def parse_arxiv_ids(md_path):
-    ids = []
-    pat = re.compile(r"\[(\d{4}\.\d{4,5})\]\(https://arxiv\.org/abs/\1")
-    with open(md_path, "r", encoding="utf-8") as f:
-        for line in f:
-            m = pat.search(line)
+def parse_arxiv_ids_from_json(json_path: str) -> List[str]:
+    try:
+        text = Path(json_path).read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return []
+    try:
+        obj = json.loads(text) if text.strip() else {}
+    except Exception:
+        return []
+    items: List[Dict[str, Any]] = []
+    if isinstance(obj, dict):
+        if isinstance(obj.get("papers"), list):
+            items = [x for x in obj.get("papers") if isinstance(x, dict)]
+        elif isinstance(obj.get("items"), list):
+            items = [x for x in obj.get("items") if isinstance(x, dict)]
+    elif isinstance(obj, list):
+        items = [x for x in obj if isinstance(x, dict)]
+
+    ids: List[str] = []
+    for it in items:
+        arxiv_id = str(it.get("arxiv_id") or it.get("id") or "").strip()
+        if not arxiv_id:
+            src = str(it.get("source") or "")
+            m = re.search(r"arxiv,?\s*([0-9]+\.[0-9]+)", src)
             if m:
-                ids.append(m.group(1))
+                arxiv_id = m.group(1)
+        if arxiv_id:
+            ids.append(arxiv_id)
     return ids
+
+
+def extract_date_str(path: str) -> str:
+    m = re.search(r"\d{4}-\d{2}-\d{2}", os.path.basename(path))
+    if m:
+        return m.group(0)
+    return datetime.now().strftime("%Y-%m-%d")
 
 
 def download_pdf(session, arxiv_id, out_path, logger):
@@ -337,18 +375,17 @@ def download_pdf(session, arxiv_id, out_path, logger):
 def run():
     logger = setup_logging()
     ap = argparse.ArgumentParser()
-    ap.add_argument("--md", default=None)
+    ap.add_argument("--json", default=None)
     ap.add_argument("--limit", type=int, default=None)
     args = ap.parse_args()
 
-    md_path = resolve_md_path(args.md)
+    json_path = resolve_json_path(args.json)
 
-    logger.info("Use markdown list: %s", md_path)
-    base = os.path.basename(md_path)
-    date_str, _ = os.path.splitext(base)
+    logger.info("Use json list: %s", json_path)
+    date_str = extract_date_str(json_path)
     print("============开始下载原始 PDF 列表==============", flush=True)
 
-    arxiv_ids = parse_arxiv_ids(md_path)
+    arxiv_ids = parse_arxiv_ids_from_json(json_path)
     if args.limit is not None:
         arxiv_ids = arxiv_ids[: args.limit]
 
@@ -410,6 +447,22 @@ def run():
         invalid,
         total,
     )
+    manifest_items = [
+        {"arxiv_id": r.arxiv_id, "ok": r.ok, "reason": r.reason, "pdf_path": r.out_path}
+        for r in results
+    ]
+    manifest = {
+        "date": date_str,
+        "total": total,
+        "downloaded": downloaded,
+        "skipped": skipped,
+        "invalid": invalid,
+        "items": manifest_items,
+    }
+    manifest_path = os.path.join(PDF_OUTPUT_DIR, date_str, MANIFEST_FILENAME)
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+    logger.info("Saved manifest: %s", manifest_path)
     print("============结束下载原始 PDF 列表==============", flush=True)
 
 

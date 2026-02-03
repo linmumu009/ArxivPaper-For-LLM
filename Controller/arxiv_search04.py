@@ -3,6 +3,7 @@
 
 import argparse
 import logging
+import json
 import re
 import time
 import traceback
@@ -27,7 +28,9 @@ from config.config import (
     SEARCH_CATEGORIES,
     REQUESTS_UA,
     OUTPUT_DIR,
+    ARXIV_JSON_DIR,
     FILENAME_FMT,
+    JSON_FILENAME_FMT,
     PAGE_SIZE_DEFAULT,
     MAX_PAPERS_DEFAULT,
     SLEEP_DEFAULT,
@@ -308,7 +311,8 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--no-single-line-progress", action="store_true", help="禁用单行进度显示")
     ap.add_argument("--user-agent", default=REQUESTS_UA, help="User-Agent（建议改成你自己的标识）")
     ap.add_argument("--use-proxy", action="store_true", default=USE_PROXY_DEFAULT, help="是否允许读取环境变量代理")
-    ap.add_argument("--out", default="", help="输出 markdown 文件路径；为空则写入 data/arxivList")
+    ap.add_argument("--out", default="", help="输出 markdown 文件路径；为空则写入 data/arxivList/md")
+    ap.add_argument("--out-json", default="", help="输出 json 文件路径；为空则写入 data/arxivList/json")
     return ap.parse_args()
 
 
@@ -436,6 +440,18 @@ def run():
             out_filename = datetime.now(timezone.utc).strftime(FILENAME_FMT)
         out_path = os.path.join(OUTPUT_DIR, out_filename)
 
+    out_json_path = args.out_json.strip()
+    if not out_json_path:
+        if args.out.strip():
+            out_json_path = os.path.splitext(out_path)[0] + ".json"
+        else:
+            os.makedirs(ARXIV_JSON_DIR, exist_ok=True)
+            if used_anchor_window and anchor_date_for_name is not None:
+                out_json_name = anchor_date_for_name.strftime(JSON_FILENAME_FMT)
+            else:
+                out_json_name = datetime.now(timezone.utc).strftime(JSON_FILENAME_FMT)
+            out_json_path = os.path.join(ARXIV_JSON_DIR, out_json_name)
+
     os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("# arXiv daily papers\n\n")
@@ -469,9 +485,34 @@ def run():
                 else:
                     f.write("   - Abstract: _N/A_\n\n")
 
+    os.makedirs(os.path.dirname(out_json_path) or ".", exist_ok=True)
+    json_payload = {
+        "timezone": "UTC",
+        "window_start_utc": start_utc.isoformat(),
+        "window_end_utc": end_utc.isoformat(),
+        "candidates_in_window": candidates,
+        "selected": len(results),
+        "search_query": search_query,
+        "generated_utc": datetime.now(timezone.utc).isoformat(),
+        "papers": [
+            {
+                "title": p.title,
+                "published_utc": p.published_utc.isoformat(),
+                "arxiv_id": p.arxiv_id,
+                "link": p.link,
+                "authors": p.authors,
+                "summary": p.summary,
+            }
+            for p in results
+        ],
+    }
+    with open(out_json_path, "w", encoding="utf-8") as f:
+        json.dump(json_payload, f, ensure_ascii=False, indent=2)
+
     logger.info("Candidates in window: %d", candidates)
     logger.info("Selected papers     : %d", len(results))
-    logger.info("Saved to            : %s", out_path)
+    logger.info("Saved markdown to   : %s", out_path)
+    logger.info("Saved json to       : %s", out_json_path)
     print("END arxiv_search.py", flush=True)
 
 

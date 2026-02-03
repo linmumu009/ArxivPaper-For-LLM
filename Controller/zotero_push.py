@@ -97,7 +97,7 @@ def parse_title_and_abstract(stem: str, summary_dir: Path, md_dir: Path) -> Tupl
                 break
         abstract = text.strip()
         return normalize_spaces(title) or stem, abstract.strip()
-    mfile = md_dir / f"{stem}.md"
+    mfile = resolve_md_path(md_dir, stem)
     if mfile.exists():
         text = read_text(mfile)
         lines = [ln.strip() for ln in text.splitlines()]
@@ -109,6 +109,16 @@ def parse_title_and_abstract(stem: str, summary_dir: Path, md_dir: Path) -> Tupl
                 break
         abstract = text.strip()
     return normalize_spaces(title) or stem, abstract.strip()
+
+
+def resolve_md_path(md_dir: Path, stem: str) -> Path:
+    direct = md_dir / f"{stem}.md"
+    if direct.exists():
+        return direct
+    nested = md_dir / stem / f"{stem}.md"
+    if nested.exists():
+        return nested
+    return direct
 
 
 def is_arxiv_id(s: str) -> bool:
@@ -316,19 +326,113 @@ class LocalAttachment:
     fake_url: str
 
 
+@dataclass
+class FileListItem:
+    stem: str
+    pdf_path: Path
+    md_path: Path
+    summary_path: Path
+    title: str
+    abstract: str
+
+
+def read_pdf_info_title(subdir: Path) -> str:
+    info_path = subdir / "pdf_info.json"
+    if not info_path.exists():
+        return ""
+    try:
+        obj = json.loads(read_text(info_path))
+    except Exception:
+        return ""
+    if isinstance(obj, dict):
+        title = obj.get("title")
+        if isinstance(title, str) and title.strip():
+            return normalize_spaces(title)
+    return ""
+
+
+def resolve_title_and_abstract_from_files(title_hint: str, summary_path: Path, md_path: Path, stem: str) -> Tuple[str, str]:
+    title = normalize_spaces(title_hint) if title_hint else ""
+    abstract = ""
+    if summary_path.exists():
+        text = read_text(summary_path).strip()
+        if not title:
+            lines = [ln.strip() for ln in text.splitlines()]
+            for ln in lines:
+                if ln.startswith("📖标题") or ln.lower().startswith("title"):
+                    t = ln.split(":", 1)[-1].strip() if ":" in ln else ln
+                    if t:
+                        title = normalize_spaces(t)
+                    break
+        abstract = text
+    elif md_path.exists():
+        text = read_text(md_path).strip()
+        if not title:
+            lines = [ln.strip() for ln in text.splitlines()]
+            for ln in lines:
+                if ln.startswith("📖标题") or ln.lower().startswith("title"):
+                    t = ln.split(":", 1)[-1].strip() if ":" in ln else ln
+                    if t:
+                        title = normalize_spaces(t)
+                    break
+        abstract = text
+    return (title or stem), abstract
+
+
+def list_file_list_items(file_list_root: Path) -> List[FileListItem]:
+    items: List[FileListItem] = []
+    if not file_list_root.exists():
+        return items
+    for subdir in sorted([p for p in file_list_root.iterdir() if p.is_dir()]):
+        pdfs = sorted(subdir.glob("*.pdf"))
+        if not pdfs:
+            continue
+        title_hint = read_pdf_info_title(subdir)
+        for pdf_path in pdfs:
+            stem = pdf_path.stem
+            md_path = resolve_md_path(subdir, stem)
+            summary_path = subdir / f"{stem}_limit.md"
+            if not summary_path.exists():
+                summary_path = subdir / f"{stem}_summary.md"
+            title, abstract = resolve_title_and_abstract_from_files(title_hint, summary_path, md_path, stem)
+            items.append(
+                FileListItem(
+                    stem=stem,
+                    pdf_path=pdf_path.resolve(),
+                    md_path=md_path.resolve(),
+                    summary_path=summary_path.resolve(),
+                    title=title,
+                    abstract=abstract,
+                )
+            )
+    return items
+
+
 def run_mode_a(args: argparse.Namespace) -> int:
     date_str = args.date.strip() or today_str()
-    pdf_dir = Path(args.pdf_root) / date_str
-    md_dir = Path(args.md_root) / date_str
-    summary_dir = Path(args.summary_root) / date_str
-    summary_attach_dir = Path(args.summary_attach_root) / date_str
-    if not pdf_dir.exists():
-        print(f"[A] pdf dir not found: {pdf_dir}")
-        return 2
-    stems = sorted([p.stem for p in pdf_dir.glob("*.pdf")])
-    if not stems:
-        print(f"[A] no pdfs under: {pdf_dir}")
-        return 0
+    # 使用 file_collect 的输出目录
+    if args.file_list_root:
+        file_list_root = Path(args.file_list_root)
+    else:
+        file_list_root = Path(DATA_ROOT) / "file_collect" / date_str
+    use_file_list = (not args.no_file_list) and file_list_root.exists()
+    if use_file_list:
+        items = list_file_list_items(file_list_root)
+        if not items:
+            print(f"[A] no pdfs under: {file_list_root}")
+            return 0
+    else:
+        pdf_dir = Path(args.pdf_root) / date_str
+        md_dir = Path(args.md_root) / date_str
+        summary_dir = Path(args.summary_root) / date_str
+        summary_attach_dir = Path(args.summary_attach_root) / date_str
+        if not pdf_dir.exists():
+            print(f"[A] pdf dir not found: {pdf_dir}")
+            return 2
+        stems = sorted([p.stem for p in pdf_dir.glob("*.pdf")])
+        if not stems:
+            print(f"[A] no pdfs under: {pdf_dir}")
+            return 0
     connector_base = connector_base_from_saveitems(args.connector_url)
     sel = connector_get_selected(connector_base)
     if sel:
@@ -358,48 +462,88 @@ def run_mode_a(args: argparse.Namespace) -> int:
     session_id = f"arxiv_daily_{uuid.uuid4().hex}"
     items_payload: List[Dict[str, Any]] = []
     attachments_plan: Dict[str, List[LocalAttachment]] = {}
-    for stem in stems:
-        pdf_path = (pdf_dir / f"{stem}.pdf").resolve()
-        title, abstract, src = resolve_title_and_abstract(
-            stem=stem,
-            summary_attach_dir=summary_attach_dir,
-            summary_dir=summary_dir,
-            md_dir=md_dir,
-            title_mode=args.a_title_mode,
-            title_map=title_map,
-            title_map_fallback=args.title_map_fallback,
-            arxiv_timeout=args.arxiv_timeout,
-        )
-        if args.title_template:
-            title = apply_title_template(args.title_template, stem=stem, title=title)
-        url = infer_arxiv_url(stem)
-        item_id = f"item_{sha1_short(stem)}_{sha1_short(title)}"
-        items_payload.append(
-            {
-                "id": item_id,
-                "itemType": "journalArticle",
-                "title": title,
-                "abstractNote": abstract,
-                "url": url,
-                "language": "zh-CN",
-            }
-        )
-        md_path = (md_dir / f"{stem}.md").resolve()
-        sum_path = (summary_attach_dir / f"{stem}.txt").resolve()
-        fake_pdf_url = f"http://local.file/{sha1_short(str(pdf_path))}/{pdf_path.name}"
-        fake_md_url = f"http://local.file/{sha1_short(str(md_path))}/{md_path.name}"
-        fake_sum_url = f"http://local.file/{sha1_short(str(sum_path))}/{sum_path.name}"
-        att_list: List[LocalAttachment] = [
-            LocalAttachment(title="PDF", mime="application/pdf", path=pdf_path, fake_url=fake_pdf_url)
-        ]
-        if md_path.exists():
-            att_list.append(LocalAttachment(title="MD", mime="text/markdown", path=md_path, fake_url=fake_md_url))
-        if sum_path.exists():
-            sum_mime = args.summary_mime or "application/octet-stream"
-            att_list.append(LocalAttachment(title="Summary", mime=sum_mime, path=sum_path, fake_url=fake_sum_url))
-        attachments_plan[item_id] = att_list
-        if args.debug:
-            print(f"[A][debug] stem={stem} title_source={src} title={title}")
+    if use_file_list:
+        for item in items:
+            stem = item.stem
+            pdf_path = item.pdf_path
+            title = item.title
+            abstract = item.abstract
+            src = "file_list"
+            if args.title_template:
+                title = apply_title_template(args.title_template, stem=stem, title=title)
+            url = infer_arxiv_url(stem)
+            item_id = f"item_{sha1_short(stem)}_{sha1_short(title)}"
+            items_payload.append(
+                {
+                    "id": item_id,
+                    "itemType": "journalArticle",
+                    "title": title,
+                    "abstractNote": abstract,
+                    "url": url,
+                    "language": "zh-CN",
+                }
+            )
+            md_path = item.md_path
+            sum_path = item.summary_path
+            fake_pdf_url = f"http://local.file/{sha1_short(str(pdf_path))}/{pdf_path.name}"
+            fake_md_url = f"http://local.file/{sha1_short(str(md_path))}/{md_path.name}"
+            fake_sum_url = f"http://local.file/{sha1_short(str(sum_path))}/{sum_path.name}"
+            att_list: List[LocalAttachment] = [
+                LocalAttachment(title="PDF", mime="application/pdf", path=pdf_path, fake_url=fake_pdf_url)
+            ]
+            if md_path.exists():
+                att_list.append(LocalAttachment(title="MD", mime="text/markdown", path=md_path, fake_url=fake_md_url))
+            if sum_path.exists():
+                sum_mime = args.summary_mime or "application/octet-stream"
+                att_list.append(LocalAttachment(title="Summary", mime=sum_mime, path=sum_path, fake_url=fake_sum_url))
+            attachments_plan[item_id] = att_list
+            if args.debug:
+                print(f"[A][debug] stem={stem} title_source={src} title={title}")
+    else:
+        items = []
+        for stem in stems:
+            pdf_path = (pdf_dir / f"{stem}.pdf").resolve()
+            title, abstract, src = resolve_title_and_abstract(
+                stem=stem,
+                summary_attach_dir=summary_attach_dir,
+                summary_dir=summary_dir,
+                md_dir=md_dir,
+                title_mode=args.a_title_mode,
+                title_map=title_map,
+                title_map_fallback=args.title_map_fallback,
+                arxiv_timeout=args.arxiv_timeout,
+            )
+            if args.title_template:
+                title = apply_title_template(args.title_template, stem=stem, title=title)
+            url = infer_arxiv_url(stem)
+            item_id = f"item_{sha1_short(stem)}_{sha1_short(title)}"
+            items_payload.append(
+                {
+                    "id": item_id,
+                    "itemType": "journalArticle",
+                    "title": title,
+                    "abstractNote": abstract,
+                    "url": url,
+                    "language": "zh-CN",
+                }
+            )
+            md_path = resolve_md_path(md_dir, stem).resolve()
+            sum_path = (summary_attach_dir / f"{stem}.txt").resolve()
+            fake_pdf_url = f"http://local.file/{sha1_short(str(pdf_path))}/{pdf_path.name}"
+            fake_md_url = f"http://local.file/{sha1_short(str(md_path))}/{md_path.name}"
+            fake_sum_url = f"http://local.file/{sha1_short(str(sum_path))}/{sum_path.name}"
+            att_list: List[LocalAttachment] = [
+                LocalAttachment(title="PDF", mime="application/pdf", path=pdf_path, fake_url=fake_pdf_url)
+            ]
+            if md_path.exists():
+                att_list.append(LocalAttachment(title="MD", mime="text/markdown", path=md_path, fake_url=fake_md_url))
+            if sum_path.exists():
+                sum_mime = args.summary_mime or "application/octet-stream"
+                att_list.append(LocalAttachment(title="Summary", mime=sum_mime, path=sum_path, fake_url=fake_sum_url))
+            attachments_plan[item_id] = att_list
+            if args.debug:
+                print(f"[A][debug] stem={stem} title_source={src} title={title}")
+
     r = http_post_json(
         args.connector_url,
         {
@@ -574,107 +718,94 @@ def run_mode_b(args: argparse.Namespace) -> int:
         return 2
     base_url = "https://api.zotero.org"
     date_str = args.date.strip() or today_str()
-    pdf_dir = Path(args.pdf_root) / date_str
-    md_dir = Path(args.md_root) / date_str
-    summary_dir = Path(args.summary_root) / date_str
-    summary_attach_dir = Path(args.summary_attach_root) / date_str
-    if not pdf_dir.exists():
-        print(f"[B] pdf dir not found: {pdf_dir}, skip zotero_push")
-        return 0
-    stems = sorted([p.stem for p in pdf_dir.glob("*.pdf")])
-    if not stems:
-        print(f"[B] no pdfs under: {pdf_dir}")
-        return 0
+    # 使用 file_collect 的输出目录
+    if args.file_list_root:
+        file_list_root = Path(args.file_list_root)
+    else:
+        file_list_root = Path(DATA_ROOT) / "file_collect" / date_str
+    use_file_list = (not args.no_file_list) and file_list_root.exists()
+    if use_file_list:
+        items = list_file_list_items(file_list_root)
+        if not items:
+            print(f"[B] no pdfs under: {file_list_root}")
+            return 0
+    else:
+        pdf_dir = Path(args.pdf_root) / date_str
+        md_dir = Path(args.md_root) / date_str
+        summary_dir = Path(args.summary_root) / date_str
+        summary_attach_dir = Path(args.summary_attach_root) / date_str
+        if not pdf_dir.exists():
+            print(f"[B] pdf dir not found: {pdf_dir}, skip zotero_push")
+            return 0
+        stems = sorted([p.stem for p in pdf_dir.glob("*.pdf")])
+        if not stems:
+            print(f"[B] no pdfs under: {pdf_dir}")
+            return 0
     col_key = ""
     if args.collection:
         col_key = ensure_collection(base_url, user_id, api_key, args.collection)
-    for stem in stems:
-        title, abstract = parse_title_and_abstract(stem, summary_dir, md_dir)
-        url = infer_arxiv_url(stem)
-        item: Dict[str, Any] = {
-            "itemType": "journalArticle",
-            "title": title,
-            "abstractNote": abstract,
-            "url": url,
-            "language": "zh-CN",
-        }
-        if col_key:
-            item["collections"] = [col_key]
-        parent_key = create_item(base_url, user_id, api_key, item)
-        if not parent_key:
-            print(f"[B] failed to create parent item for {stem}")
-            continue
-        pdf_path = (pdf_dir / f"{stem}.pdf").resolve()
-        md_path = (md_dir / f"{stem}.md").resolve()
-        sum_path = (summary_attach_dir / f"{stem}.txt").resolve()
-        if args.b_attachment_mode == "imported":
-            att_pdf = {
-                "itemType": "attachment",
-                "linkMode": "imported_file",
-                "title": "PDF",
-                "contentType": "application/pdf",
-                "parentItem": parent_key,
+    if use_file_list:
+        for item in items:
+            stem = item.stem
+            title = item.title
+            abstract = item.abstract
+            url = infer_arxiv_url(stem)
+            item_payload: Dict[str, Any] = {
+                "itemType": "journalArticle",
+                "title": title,
+                "abstractNote": abstract,
+                "url": url,
+                "language": "zh-CN",
             }
-            pdf_key = create_attachment_item(base_url, user_id, api_key, att_pdf)
-            ok_pdf = False
-            if pdf_key:
-                ok_pdf = upload_file_to_attachment(base_url, user_id, api_key, pdf_key, pdf_path)
-            print(f"[B] {stem} PDF upload: {ok_pdf}")
-            ok_md = False
-            if md_path.exists():
-                att_md = {
+            if col_key:
+                item_payload["collections"] = [col_key]
+            parent_key = create_item(base_url, user_id, api_key, item_payload)
+            if not parent_key:
+                print(f"[B] failed to create parent item for {stem}")
+                continue
+            pdf_path = item.pdf_path
+            md_path = item.md_path
+            sum_path = item.summary_path
+            if args.b_attachment_mode == "imported":
+                att_pdf = {
                     "itemType": "attachment",
                     "linkMode": "imported_file",
-                    "title": "MD",
-                    "contentType": "text/markdown",
-                    "parentItem": parent_key,
-                }
-                md_key = create_attachment_item(base_url, user_id, api_key, att_md)
-                if md_key:
-                    ok_md = upload_file_to_attachment(base_url, user_id, api_key, md_key, md_path)
-            print(f"[B] {stem} MD upload: {ok_md}")
-            ok_sum = False
-            if sum_path.exists():
-                att_sum = {
-                    "itemType": "attachment",
-                    "linkMode": "imported_file",
-                    "title": "Summary",
-                    "contentType": "text/plain",
-                    "parentItem": parent_key,
-                }
-                sum_key = create_attachment_item(base_url, user_id, api_key, att_sum)
-                if sum_key:
-                    ok_sum = upload_file_to_attachment(base_url, user_id, api_key, sum_key, sum_path)
-            print(f"[B] {stem} Summary upload: {ok_sum}")
-        else:
-            create_attachment_item(
-                base_url,
-                user_id,
-                api_key,
-                {
-                    "itemType": "attachment",
-                    "linkMode": "linked_file",
                     "title": "PDF",
                     "contentType": "application/pdf",
-                    "path": str(pdf_path),
                     "parentItem": parent_key,
-                },
-            )
-            if md_path.exists():
-                create_attachment_item(
-                    base_url,
-                    user_id,
-                    api_key,
-                    {
+                }
+                pdf_key = create_attachment_item(base_url, user_id, api_key, att_pdf)
+                ok_pdf = False
+                if pdf_key:
+                    ok_pdf = upload_file_to_attachment(base_url, user_id, api_key, pdf_key, pdf_path)
+                print(f"[B] {stem} PDF upload: {ok_pdf}")
+                ok_md = False
+                if md_path.exists():
+                    att_md = {
                         "itemType": "attachment",
-                        "linkMode": "linked_file",
+                        "linkMode": "imported_file",
                         "title": "MD",
                         "contentType": "text/markdown",
-                        "path": str(md_path),
                         "parentItem": parent_key,
-                    },
-                )
-            if sum_path.exists():
+                    }
+                    md_key = create_attachment_item(base_url, user_id, api_key, att_md)
+                    if md_key:
+                        ok_md = upload_file_to_attachment(base_url, user_id, api_key, md_key, md_path)
+                print(f"[B] {stem} MD upload: {ok_md}")
+                ok_sum = False
+                if sum_path.exists():
+                    att_sum = {
+                        "itemType": "attachment",
+                        "linkMode": "imported_file",
+                        "title": "Summary",
+                        "contentType": "text/plain",
+                        "parentItem": parent_key,
+                    }
+                    sum_key = create_attachment_item(base_url, user_id, api_key, att_sum)
+                    if sum_key:
+                        ok_sum = upload_file_to_attachment(base_url, user_id, api_key, sum_key, sum_path)
+                print(f"[B] {stem} Summary upload: {ok_sum}")
+            else:
                 create_attachment_item(
                     base_url,
                     user_id,
@@ -682,14 +813,145 @@ def run_mode_b(args: argparse.Namespace) -> int:
                     {
                         "itemType": "attachment",
                         "linkMode": "linked_file",
-                        "title": "Summary",
-                        "contentType": "text/plain",
-                        "path": str(sum_path),
+                        "title": "PDF",
+                        "contentType": "application/pdf",
+                        "path": str(pdf_path),
                         "parentItem": parent_key,
                     },
                 )
-            print(f"[B] {stem} linked attachments created")
-        print(f"[B] created parent item: {parent_key}")
+                if md_path.exists():
+                    create_attachment_item(
+                        base_url,
+                        user_id,
+                        api_key,
+                        {
+                            "itemType": "attachment",
+                            "linkMode": "linked_file",
+                            "title": "MD",
+                            "contentType": "text/markdown",
+                            "path": str(md_path),
+                            "parentItem": parent_key,
+                        },
+                    )
+                if sum_path.exists():
+                    create_attachment_item(
+                        base_url,
+                        user_id,
+                        api_key,
+                        {
+                            "itemType": "attachment",
+                            "linkMode": "linked_file",
+                            "title": "Summary",
+                            "contentType": "text/plain",
+                            "path": str(sum_path),
+                            "parentItem": parent_key,
+                        },
+                    )
+                print(f"[B] {stem} linked attachments created")
+            print(f"[B] created parent item: {parent_key}")
+    else:
+        for stem in stems:
+            title, abstract = parse_title_and_abstract(stem, summary_dir, md_dir)
+            url = infer_arxiv_url(stem)
+            item: Dict[str, Any] = {
+                "itemType": "journalArticle",
+                "title": title,
+                "abstractNote": abstract,
+                "url": url,
+                "language": "zh-CN",
+            }
+            if col_key:
+                item["collections"] = [col_key]
+            parent_key = create_item(base_url, user_id, api_key, item)
+            if not parent_key:
+                print(f"[B] failed to create parent item for {stem}")
+                continue
+            pdf_path = (pdf_dir / f"{stem}.pdf").resolve()
+            md_path = resolve_md_path(md_dir, stem).resolve()
+            sum_path = (summary_attach_dir / f"{stem}.txt").resolve()
+            if args.b_attachment_mode == "imported":
+                att_pdf = {
+                    "itemType": "attachment",
+                    "linkMode": "imported_file",
+                    "title": "PDF",
+                    "contentType": "application/pdf",
+                    "parentItem": parent_key,
+                }
+                pdf_key = create_attachment_item(base_url, user_id, api_key, att_pdf)
+                ok_pdf = False
+                if pdf_key:
+                    ok_pdf = upload_file_to_attachment(base_url, user_id, api_key, pdf_key, pdf_path)
+                print(f"[B] {stem} PDF upload: {ok_pdf}")
+                ok_md = False
+                if md_path.exists():
+                    att_md = {
+                        "itemType": "attachment",
+                        "linkMode": "imported_file",
+                        "title": "MD",
+                        "contentType": "text/markdown",
+                        "parentItem": parent_key,
+                    }
+                    md_key = create_attachment_item(base_url, user_id, api_key, att_md)
+                    if md_key:
+                        ok_md = upload_file_to_attachment(base_url, user_id, api_key, md_key, md_path)
+                print(f"[B] {stem} MD upload: {ok_md}")
+                ok_sum = False
+                if sum_path.exists():
+                    att_sum = {
+                        "itemType": "attachment",
+                        "linkMode": "imported_file",
+                        "title": "Summary",
+                        "contentType": "text/plain",
+                        "parentItem": parent_key,
+                    }
+                    sum_key = create_attachment_item(base_url, user_id, api_key, att_sum)
+                    if sum_key:
+                        ok_sum = upload_file_to_attachment(base_url, user_id, api_key, sum_key, sum_path)
+                print(f"[B] {stem} Summary upload: {ok_sum}")
+            else:
+                create_attachment_item(
+                    base_url,
+                    user_id,
+                    api_key,
+                    {
+                        "itemType": "attachment",
+                        "linkMode": "linked_file",
+                        "title": "PDF",
+                        "contentType": "application/pdf",
+                        "path": str(pdf_path),
+                        "parentItem": parent_key,
+                    },
+                )
+                if md_path.exists():
+                    create_attachment_item(
+                        base_url,
+                        user_id,
+                        api_key,
+                        {
+                            "itemType": "attachment",
+                            "linkMode": "linked_file",
+                            "title": "MD",
+                            "contentType": "text/markdown",
+                            "path": str(md_path),
+                            "parentItem": parent_key,
+                        },
+                    )
+                if sum_path.exists():
+                    create_attachment_item(
+                        base_url,
+                        user_id,
+                        api_key,
+                        {
+                            "itemType": "attachment",
+                            "linkMode": "linked_file",
+                            "title": "Summary",
+                            "contentType": "text/plain",
+                            "path": str(sum_path),
+                            "parentItem": parent_key,
+                        },
+                    )
+                print(f"[B] {stem} linked attachments created")
+            print(f"[B] created parent item: {parent_key}")
     return 0
 
 
@@ -725,6 +987,8 @@ def main() -> None:
 
     pa.add_argument("--collection", default="论文_导入未处理")
     pa.add_argument("--b-attachment-mode", choices=["imported", "linked"], default="imported")
+    pa.add_argument("--file-list-root", default="")
+    pa.add_argument("--no-file-list", action="store_true")
 
     args = pa.parse_args()
 

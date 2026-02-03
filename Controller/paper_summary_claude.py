@@ -13,10 +13,10 @@ from openai import OpenAI
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from config.config import (
-    qwen_api_key,
-    summary_base_url,
-    summary_model,
+from config.config import (  # noqa: E402
+    summary_base_url_2,
+    summary_gptgod_apikey,
+    summary_model_2,
     summary_max_tokens,
     summary_temperature,
     summary_input_hard_limit,
@@ -44,7 +44,7 @@ def crop_to_input_tokens(text: str, limit_tokens: int) -> str:
 
 
 def list_md_files(root: Path) -> List[Path]:
-    return sorted(root.rglob("*.md"))
+    return sorted(root.glob("*.md"))
 
 
 def today_str() -> str:
@@ -73,12 +73,12 @@ def write_gather(single_dir: Path, gather_dir: Path, date_str: str) -> Path:
 
 
 def make_client() -> OpenAI:
-    key = (qwen_api_key or "").strip()
+    key = (summary_gptgod_apikey or "").strip()
     if not key:
-        raise SystemExit("qwen_api_key missing in config.config")
-    base = (summary_base_url or "").strip()
+        raise SystemExit("summary_gptgod_apikey missing in config.config")
+    base = (summary_base_url_2 or "").strip()
     if not base:
-        raise SystemExit("summary_base_url missing in config.config")
+        raise SystemExit("summary_base_url_2 missing in config.config")
     return OpenAI(api_key=key, base_url=base)
 
 
@@ -100,7 +100,7 @@ def summarize_one(client: OpenAI, md_path: Path) -> Tuple[Path, str]:
     if summary_max_tokens is not None:
         kwargs["max_tokens"] = int(summary_max_tokens)
     resp = client.chat.completions.create(
-        model=summary_model,
+        model=summary_model_2,
         messages=[
             {"role": "system", "content": sys_prompt},
             {"role": "user", "content": user_content},
@@ -117,62 +117,14 @@ def summarize_one(client: OpenAI, md_path: Path) -> Tuple[Path, str]:
             arxiv_id = md_path.stem
             lines[i] = f"🌐来源：arXiv,{arxiv_id}"
             break
-    content = normalize_summary_format("\n".join(lines))
+    content = "\n".join(lines)
     return md_path, content
 
 
-def normalize_summary_format(text: str) -> str:
-    if not text.strip():
-        return text
-
-    lines = text.splitlines()
-    section_headers = ("🛎️", "📝", "🔎", "💡")
-
-    def is_section_header(line: str) -> bool:
-        s = line.strip()
-        return any(s.startswith(h) for h in section_headers)
-
-    # Ensure the first line uses "笔记标题："
-    first_idx = None
-    for idx, line in enumerate(lines):
-        if line.strip():
-            first_idx = idx
-            break
-    if first_idx is None:
-        return text
-
-    first = lines[first_idx].strip()
-    if first.startswith("笔记标题"):
-        rest = first[len("笔记标题"):].lstrip()
-        if rest.startswith(":") or rest.startswith("："):
-            rest = rest[1:].lstrip()
-        lines[first_idx] = f"笔记标题：{rest}".rstrip()
-    elif first.startswith("标题"):
-        rest = first[len("标题"):].lstrip()
-        if rest.startswith(":") or rest.startswith("："):
-            rest = rest[1:].lstrip()
-        lines[first_idx] = f"笔记标题：{rest}".rstrip()
-    elif is_section_header(first) or first.startswith("🔸"):
-        lines.insert(first_idx, "笔记标题：")
-    else:
-        lines[first_idx] = f"笔记标题：{first}".rstrip()
-
-    # Insert a blank line before each section header
-    out: List[str] = []
-    for line in lines:
-        s = line.strip()
-        if is_section_header(s):
-            if out and out[-1].strip():
-                out.append("")
-        out.append(line.rstrip())
-
-    return "\n".join(out).rstrip() + "\n"
-
-
 def run() -> None:
-    ap = argparse.ArgumentParser("paper_summary")
+    ap = argparse.ArgumentParser("paper_summary_claude")
     ap.add_argument("--input-dir", default=str(Path(DATA_ROOT) / "selectedpaper_to_mineru"))
-    ap.add_argument("--out-root", default=str(Path(DATA_ROOT) / "paper_summary"))
+    ap.add_argument("--out-root", default=str(Path(DATA_ROOT) / "paper_summary_claude"))
     ap.add_argument("--date", default="")
     ap.add_argument("--concurrency", type=int, default=summary_concurrency)
     args = ap.parse_args()

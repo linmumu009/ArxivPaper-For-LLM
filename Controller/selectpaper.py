@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import List, Dict, Any, Tuple
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from config.config import DATA_ROOT  # noqa: E402
+from config.config import DATA_ROOT, MANIFEST_FILENAME  # noqa: E402
 
 
 def find_latest_json(root: Path) -> Tuple[Path, str]:
@@ -71,6 +71,8 @@ def run(args: argparse.Namespace) -> None:
     total = len(items)
     moved = 0
     skipped = 0
+    missing = 0
+    manifest_items: List[Dict[str, Any]] = []
     for idx, it in enumerate(items, 1):
         aid = extract_arxiv_id(it)
         if not aid:
@@ -87,16 +89,42 @@ def run(args: argparse.Namespace) -> None:
                 break
         if src is None:
             skipped += 1
+            missing += 1
+            manifest_items.append(
+                {"arxiv_id": aid, "source_pdf": "", "selected_pdf": str(out_dir / f"{aid}.pdf"), "status": "missing"}
+            )
             continue
         dst = out_dir / f"{aid}.pdf"
         if dst.exists():
             skipped += 1
+            manifest_items.append(
+                {"arxiv_id": aid, "source_pdf": str(src), "selected_pdf": str(dst), "status": "exists"}
+            )
             continue
         shutil.move(str(src), str(dst))
         moved += 1
+        manifest_items.append(
+            {"arxiv_id": aid, "source_pdf": str(src), "selected_pdf": str(dst), "status": "moved"}
+        )
         print(f"\r[move] {idx}/{total} moved={moved} skipped={skipped}", end="", flush=True)
     print()
     print("============结束拷贝精选论文 PDF==============", flush=True)
+    manifest_path = out_dir / MANIFEST_FILENAME
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "date": date_str,
+                "total": total,
+                "moved": moved,
+                "skipped": skipped,
+                "missing": missing,
+                "items": manifest_items,
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
 
 
 def main() -> None:

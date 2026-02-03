@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import os
 import re
@@ -10,7 +11,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Any
 
 from openai import OpenAI
 
@@ -26,6 +27,7 @@ from config.config import (  # noqa: E402
     theme_select_temperature,
     theme_select_concurrency,
     theme_select_system_prompt,
+    PAPER_DEDUP_DIR,
 )
 
 
@@ -50,87 +52,43 @@ def normalize_text(s: str) -> str:
     return re.sub(r"\s+", " ", (s or "")).strip()
 
 
-def find_latest_md(root: Path, explicit: Optional[str]) -> Path:
+def find_latest_json(root: Path, explicit: Optional[str]) -> Path:
     if explicit:
         p = Path(explicit)
         if not p.exists():
-            raise SystemExit(f"md not found: {p}")
+            raise SystemExit(f"json not found: {p}")
         return p
     if not root.exists():
-        raise SystemExit(f"md dir not found: {root}")
-    files = sorted([p for p in root.glob("*.md") if p.is_file()])
+        raise SystemExit(f"json dir not found: {root}")
+    files = sorted([p for p in root.glob("*.json") if p.is_file()])
     if not files:
-        raise SystemExit(f"no markdown in {root}")
+        raise SystemExit(f"no json in {root}")
     return files[-1]
 
 
+def load_json_papers(path: Path) -> Tuple[Dict[str, Any], List[Dict[str, Any]]]:
+    text = path.read_text(encoding="utf-8", errors="ignore").strip()
+    try:
+        obj = json.loads(text) if text else {}
+    except json.JSONDecodeError:
+        obj = {}
+    if isinstance(obj, dict):
+        papers = obj.get("papers") or []
+    elif isinstance(obj, list):
+        papers = obj
+        obj = {"papers": papers}
+    else:
+        papers = []
+        obj = {"papers": papers}
+    papers = [p for p in papers if isinstance(p, dict)]
+    return obj, papers
+
+
 @dataclass
-class PaperBlock:
-    start: int
-    end: int
-    insert_after: int
+class PaperRecord:
     title: str
     abstract: str
-
-
-def extract_title(line: str) -> str:
-    start = line.find("**")
-    end = line.rfind("**")
-    if start != -1 and end != -1 and end > start + 2:
-        return normalize_text(line[start + 2 : end])
-    return normalize_text(line)
-
-
-def extract_abstract(block_lines: List[str]) -> str:
-    in_abs = False
-    parts: List[str] = []
-    for raw in block_lines:
-        line = raw.strip()
-        if line.startswith("- Abstract:"):
-            in_abs = True
-            continue
-        if not in_abs:
-            continue
-        if "</details>" in line:
-            break
-        if "<details" in line or "<summary" in line:
-            continue
-        if not line:
-            continue
-        parts.append(line)
-    return normalize_text(" ".join(parts))
-
-
-def parse_blocks(lines: List[str]) -> List[PaperBlock]:
-    blocks: List[PaperBlock] = []
-    current_start: Optional[int] = None
-    for idx, raw in enumerate(lines):
-        line = raw.strip()
-        if re.match(r"^\d+\.\s+\*\*", line):
-            if current_start is not None:
-                blocks.append(_build_block(lines, current_start, idx))
-            current_start = idx
-    if current_start is not None:
-        blocks.append(_build_block(lines, current_start, len(lines)))
-    return blocks
-
-
-def _build_block(lines: List[str], start: int, end: int) -> PaperBlock:
-    title_line = lines[start].strip()
-    title = extract_title(title_line)
-    insert_after = start
-    for i in range(start, end):
-        if lines[i].strip().startswith("- arXiv: ["):
-            insert_after = i
-            break
-    abstract = extract_abstract(lines[start:end])
-    return PaperBlock(
-        start=start,
-        end=end,
-        insert_after=insert_after,
-        title=title,
-        abstract=abstract,
-    )
+    arxiv_id: str
 
 
 def make_client() -> OpenAI:
@@ -164,7 +122,7 @@ def parse_score(text: str) -> float:
     return val
 
 
-def score_one(client: OpenAI, block: PaperBlock) -> float:
+def score_one(client: OpenAI, block: PaperRecord) -> float:
     user_content = build_user_prompt(block.title, block.abstract)
     kwargs = {}
     if theme_select_temperature is not None:
@@ -184,46 +142,41 @@ def score_one(client: OpenAI, block: PaperBlock) -> float:
     return parse_score(content)
 
 
-def render_output(lines: List[str], scores: Dict[int, float]) -> List[str]:
-    out_lines: List[str] = []
-    for idx, line in enumerate(lines):
-        out_lines.append(line)
-        if idx in scores:
-            score = scores[idx]
-            out_lines.append(f"   - theme_relevant_score: {score:.3f}\n")
-    return out_lines
-
-
 def run() -> None:
     logger = setup_logging()
     print("============开始主题相关性评分==============", flush=True)
     ap = argparse.ArgumentParser("llm_select_theme")
-    ap.add_argument("--md", default=None, help="input markdown from paperList_remove_duplications")
+    ap.add_argument("--json", default=None, help="input json from paperList_remove_duplications")
     ap.add_argument("--outdir", default=None, help="output dir (default data/llm_select_theme)")
     args = ap.parse_args()
 
-    input_dir = ROOT / DATA_ROOT / "paperList_remove_duplications"
-    md_path = find_latest_md(input_dir, args.md)
+    input_dir = ROOT / PAPER_DEDUP_DIR
+    json_path = find_latest_json(input_dir, args.json)
     out_dir = Path(args.outdir) if args.outdir else ROOT / DATA_ROOT / "llm_select_theme"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / md_path.name
+    out_path = out_dir / Path(json_path.name).with_suffix(".json").name
 
-    lines = md_path.read_text(encoding="utf-8", errors="ignore").splitlines(keepends=True)
-    blocks = parse_blocks(lines)
-    if not blocks:
-        out_path.write_text("".join(lines), encoding="utf-8")
-        logger.warning("No paper blocks found; wrote original content to %s", out_path)
+    meta_obj, papers = load_json_papers(json_path)
+    records: List[PaperRecord] = []
+    for p in papers:
+        title = normalize_text(str(p.get("title", "")))
+        abstract = normalize_text(str(p.get("summary", "")))
+        arxiv_id = str(p.get("arxiv_id", "")).strip()
+        records.append(PaperRecord(title=title, abstract=abstract, arxiv_id=arxiv_id))
+    if not records:
+        out_path.write_text(json.dumps(meta_obj, ensure_ascii=False, indent=2), encoding="utf-8")
+        logger.warning("No paper records found; wrote original json to %s", out_path)
         return
 
     client = make_client()
-    scores: Dict[int, float] = {}
+    scores: Dict[str, float] = {}
     workers = max(1, int(theme_select_concurrency or 1))
-    logger.info("Scoring %d paper(s) with %d worker(s)", len(blocks), workers)
+    logger.info("Scoring %d paper(s) with %d worker(s)", len(records), workers)
 
-    total = len(blocks)
+    total = len(records)
     done = 0
     with ThreadPoolExecutor(max_workers=workers) as pool:
-        future_map = {pool.submit(score_one, client, blk): blk for blk in blocks}
+        future_map = {pool.submit(score_one, client, blk): blk for blk in records}
         for future in as_completed(future_map):
             blk = future_map[future]
             try:
@@ -231,15 +184,22 @@ def run() -> None:
             except Exception as exc:
                 logger.warning("Score failed for %s: %r", blk.title, exc)
                 score = 0.0
-            scores[blk.insert_after] = score
+            scores[blk.arxiv_id or blk.title] = score
             done += 1
             sys.stdout.write(f"\r[PROGRESS] scoring {done}/{total}")
             sys.stdout.flush()
             time.sleep(0.05)
     print()
 
-    out_lines = render_output(lines, scores)
-    out_path.write_text("".join(out_lines), encoding="utf-8")
+    for p in papers:
+        key = str(p.get("arxiv_id", "")).strip() or str(p.get("title", "")).strip()
+        if key in scores:
+            p["theme_relevant_score"] = round(float(scores[key]), 3)
+
+    meta_obj["papers"] = papers
+    meta_obj["selected"] = len(papers)
+    meta_obj["generated_utc"] = datetime.utcnow().isoformat() + "Z"
+    out_path.write_text(json.dumps(meta_obj, ensure_ascii=False, indent=2), encoding="utf-8")
     logger.info("Saved: %s", out_path)
     print("============结束主题相关性评分==============", flush=True)
 
